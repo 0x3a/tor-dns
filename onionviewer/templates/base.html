@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="onionviewer">
+        <meta name="author" content="">
+        <title>Onion Viewer</title>
+        <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    </head>
+    <body>
+        <div class="panel panel-default">
+            <div align="center" style=" font-size:25px; font-family: 'Courier New', monospace;"><a href="{{ url_for('index') }}">Onion Viewer</a><br /></div>
+        </div>
+        {% block container %}{% endblock %}
+        <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+        <script type="text/javascript">
+            jQuery(document).ready(function($) {
+                $(".clickable-row").click(function() {
+                    window.document.location = $(this).data("href");
+                });
+            });
+        </script>
+    </body>
+</html>
+

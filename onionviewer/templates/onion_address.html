@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block container %}
+<div class="container">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title pull-left" style="padding-top: 8px;">Onion address details</h3>
+          <div class="clearfix"></div>
+        </div>
+
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td>Hidden service website title</td>
+                    <td>{% if onion_address.website_title %}{{ onion_address.website_title }}{% endif %}</td>
+                </tr>
+                <tr>
+                    <td>Address</td>
+                    <td><span class="label label-info">{{ onion_address.address }}.onion</span></td>
+                </tr>
+                <tr>
+                    <td>First seen</td>
+                    <td style="font-family:monospace;">{{ onion_address.first_seen }}</td>
+                </tr>
+                <tr>
+                    <td>Last seen</td>
+                    <td style="font-family:monospace;">{{ onion_address.last_seen }}</td>
+                </tr>
+                <tr>
+                    <td>Count</td>
+                    <td>{{ onion_address.count }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

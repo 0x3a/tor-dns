@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% macro render_pagination(pagination) %}
+<nav>
+    <ul class="pagination">
+    {%- for page in pagination.iter_pages() %}
+      {% if page %}
+        {% if page != pagination.page %}
+          <li class="inactive"><a href="{{ url_for_other_page(page) }}{%- if request.query_string -%}?{{ request.query_string }}{%- endif -%}">{{ page }}</a></li>
+        {% else %}
+          <li class="active"><a href="{{ url_for_other_page(page) }}{%- if request.query_string -%}?{{ request.query_string }}{%- endif -%}">{{ page }}</a></li>
+        {% endif %}
+      {% else %}
+        <li><span class=inactive ellipsis>...</span></li>
+      {% endif %}
+    {%- endfor %}
+    {% if pagination.has_next %}
+      <li class="inactive"><a href="{{ url_for_other_page(pagination.page + 1)
+        }}{%- if request.query_string -%}?{{ request.query_string }}{%- endif -%}">Next &raquo;</a></li>
+    {% endif %}
+    </ul>
+    <form class="navbar-form navbar-right" role="search" action="{{ url_for('index') }}" method="GET" name="search" style="padding-top:12px;">
+      <div class="form-group">
+        <label>Result limit: &nbsp;
+          <select name="limit" class="form-sm form-control" type="text">
+              <option {% if request.args.get('limit') == '10' %}selected="true"{% endif %} value="10">10</option>
+              <option {% if request.args.get('limit') == '25' %}selected="true"{% endif %} value="25">25</option>
+              <option {% if request.args.get('limit') == '50' %}selected="true"{% endif %} value="50">50</option>
+              <option {% if request.args.get('limit') == '100' %}selected="true"{% endif %} value="100">100</option>
+              <option {% if request.args.get('limit') == '250' %}selected="true"{% endif %} value="250">250</option>
+          </select>
+        </label> &nbsp;&nbsp;|&nbsp;&nbsp;
+        <label>Search filter: &nbsp;
+        <input type="text" class="form-control" {%- if request.args.get('q') -%}value="{{ request.args.get('q') }}"{%- endif -%}  placeholder="Search" name="q">
+      </label> &nbsp;&nbsp;|&nbsp;&nbsp;
+      {% if query_order %}
+      <input type="hidden" name="order" value="{{ query_order }}">
+      {% endif %}
+      <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-refresh"></span> Apply filter</button>
+      &nbsp;&nbsp;|&nbsp;&nbsp;
+      <a class="btn btn-warning" href="{{ url_for('index') }}"><span class="glyphicon glyphicon-remove"></span> Reset filter</a>
+    </div>
+  </form>
+</nav>
+{% endmacro %}
+
+{% block container %}
+<div class="container">
+    <script type="text/javascript">
+    function clipboard_prompt(text) {
+      window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
+    }
+
+    function get_sorting_order_url(type) 
+    {
+      var base_url = "{{ url_for('index') }}?{{ request.query_string|safe }}";
+
+      if( base_url.indexOf("order=") == -1 ) // If there's no ordering yet
+      {
+          if( base_url != "/?") {
+                base_url += "&";
+          }
+          base_url += "order=" + type + "_desc"; // Default descending order
+
+      } else { // If there's ordering, replace it with the clicked one
+          var param_list = base_url.split("?")[1].split("&");
+
+          base_url = "/?";
+          for( param in param_list)
+          {
+            param_value = param_list[param];
+            if(param_value.indexOf("order=") != -1)
+            {
+
+              if( base_url != "/?") {
+                base_url += "&";
+              }
+
+              base_url += "order="
+              if(param_value.indexOf(type + "_") != -1)
+              {
+                if(param_value.indexOf(type + "_desc") == -1)
+                {
+                  base_url += type + "_desc";
+                } else {
+                  base_url += type + "_asc";
+                }
+              } else {
+                base_url += type + "_desc";
+              }
+            } else {
+              if( base_url != "/?") {
+                base_url += "&";
+              }
+
+              base_url += param_list[param];
+            }
+          }
+      }
+      return base_url;
+    }
+    </script>
+    {{ render_pagination(pagination) }}
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Observed onion addresses ({{ total_count }} total)</h3>
+        </div>
+        <div class="panel-body">
+          <table class="table table-striped table-bordered table-hover">
+              <thead>
+                  <tr>
+                    <th></th>
+                    <th>Address <a href="#" onclick="window.document.location=get_sorting_order_url('address')"><span {% if query_order and 'address' not in query_order %}style="color:grey;"{% else %}style="color:black;"{% endif %} class="glyphicon glyphicon-sort"></span></a></th>
+                    <th>First seen <a href="#" onclick="window.document.location=get_sorting_order_url('fs')"><span {% if query_order and 'fs' not in query_order %}style="color:grey;"{% else %}style="color:black;"{% endif %} class="glyphicon glyphicon-sort"></span></a></th>
+                    <th>Last seen <a href="#" onclick="window.document.location=get_sorting_order_url('ls')"><span {% if query_order and 'ls' not in query_order %}style="color:grey;"{% else %}style="color:black;"{% endif %} class="glyphicon glyphicon-sort"></span></a></th>
+                    <th>Count <a href="#" onclick="window.document.location=get_sorting_order_url('count')"><span {% if query_order and 'count' not in query_order %}style="color:grey;"{% else %}style="color:black;"{% endif %} class="glyphicon glyphicon-sort"></span></a></th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for onion_address in pagination.items %}
+                  <tr>
+                      <td><a href="{{ url_for('onion_address', address=onion_address.address) }}"><span class="glyphicon glyphicon-info-sign"></span></a></td>
+                      <td>
+                        <a onlick="javascript:clipboard_prompt('{{ onion_address.address }}.onion')" data-toggle="tooltip" data-placement="bottom" title="{{ onion_address.website_title }}" >{{ onion_address.address }}.onion</a>
+                      </td>
+                      <td class="text-nowrap">{{onion_address.first_seen|datetimeformat("Y-M-d HH:mm")}}</td>
+                      <td class="text-nowrap">{{onion_address.last_seen|datetimeformat("Y-M-d HH:mm")}}</td>
+                      <td>{{ onion_address.count }}</td>
+                  </tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

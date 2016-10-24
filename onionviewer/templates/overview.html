@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block container %}
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="pull-left" >Onion addresses overview</h3>
+            <form class="navbar-form navbar-right" style="padding-top:12px;" role="limit_filter" action="{{ url_for('overview') }}" method="GET" name="limit_filter">
+                <label>
+                    From &nbsp; <input class="" name="start_time" type="input">
+                    &nbsp; to &nbsp; <input class="" name="end_time" type="input">
+                </label> &nbsp;&nbsp;|&nbsp;&nbsp;
+                <label>Result limit: &nbsp;
+                <select name="limit" class="form-sm form-control" type="text">
+                    <option {% if request.args.get('limit') == '10' %}selected="true"{% endif %} value="10">10</option>
+                    <option {% if request.args.get('limit') == '25' %}selected="true"{% endif %} value="25">25</option>
+                    <option {% if request.args.get('limit') == '50' %}selected="true"{% endif %} value="50">50</option>
+                    <option {% if request.args.get('limit') == '100' %}selected="true"{% endif %} value="100">100</option>
+                    <option {% if request.args.get('limit') == '250' %}selected="true"{% endif %} value="250">250</option>
+                    <option {% if request.args.get('limit') == '0' %}selected="true"{% endif %} value="0">Unlimited</option>
+                </select>
+                </label> &nbsp;&nbsp;|&nbsp;&nbsp;
+                <button type="submit" class="btn btn-m pull-right btn-primary btn-success"><span class="glyphicon glyphicon-refresh"></span> Update view</a></button>
+            </form>
+        </div>
+        <div class="clearfix"></div>
+        <div class="panel-body">
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Address</th>
+                        <th>First seen</th>
+                        <th>Last Seen</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for onion_address in overviewlist %}
+                    <tr>
+                        <td><a href="{{ url_for('onion_address', address=onion_address.address) }}">{{ onion_address.id }}</a></td>
+                        <td>{{ onion_address.address }}.onion</td>
+                        <td class="text-nowrap">{{ onion_address.first_seen|datetimeformat("Y-M-d HH:mm") }}</td>
+                        <td class="text-nowrap">{{ onion_address.last_seen|datetimeformat("Y-M-d HH:mm") }}</td>
+                        <td>{{ onion_address.count }}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
