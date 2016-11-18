@@ -1,0 +1,2332 @@
+m4trace:/usr/share/aclocal-1.11/amversion.m4:17: -1- AC_DEFUN([AM_AUTOMAKE_VERSION], [am__api_version='1.11'
+dnl Some users find AM_AUTOMAKE_VERSION and mistake it for a way to
+dnl require some minimum version.  Point them to the right macro.
+m4_if([$1], [1.11.3], [],
+      [AC_FATAL([Do not call $0, use AM_INIT_AUTOMAKE([$1]).])])dnl
+])
+m4trace:/usr/share/aclocal-1.11/amversion.m4:36: -1- AC_DEFUN([AM_SET_CURRENT_AUTOMAKE_VERSION], [AM_AUTOMAKE_VERSION([1.11.3])dnl
+m4_ifndef([AC_AUTOCONF_VERSION],
+  [m4_copy([m4_PACKAGE_VERSION], [AC_AUTOCONF_VERSION])])dnl
+_AM_AUTOCONF_VERSION(m4_defn([AC_AUTOCONF_VERSION]))])
+m4trace:/usr/share/aclocal-1.11/auxdir.m4:49: -1- AC_DEFUN([AM_AUX_DIR_EXPAND], [dnl Rely on autoconf to set up CDPATH properly.
+AC_PREREQ([2.50])dnl
+# expand $ac_aux_dir to an absolute path
+am_aux_dir=`cd $ac_aux_dir && pwd`
+])
+m4trace:/usr/share/aclocal-1.11/cond.m4:15: -1- AC_DEFUN([AM_CONDITIONAL], [AC_PREREQ(2.52)dnl
+ ifelse([$1], [TRUE],  [AC_FATAL([$0: invalid condition: $1])],
+	[$1], [FALSE], [AC_FATAL([$0: invalid condition: $1])])dnl
+AC_SUBST([$1_TRUE])dnl
+AC_SUBST([$1_FALSE])dnl
+_AM_SUBST_NOTMAKE([$1_TRUE])dnl
+_AM_SUBST_NOTMAKE([$1_FALSE])dnl
+m4_define([_AM_COND_VALUE_$1], [$2])dnl
+if $2; then
+  $1_TRUE=
+  $1_FALSE='#'
+else
+  $1_TRUE='#'
+  $1_FALSE=
+fi
+AC_CONFIG_COMMANDS_PRE(
+[if test -z "${$1_TRUE}" && test -z "${$1_FALSE}"; then
+  AC_MSG_ERROR([[conditional "$1" was never defined.
+Usually this means the macro was only invoked conditionally.]])
+fi])])
+m4trace:/usr/share/aclocal-1.11/depend.m4:28: -1- AC_DEFUN([_AM_DEPENDENCIES], [AC_REQUIRE([AM_SET_DEPDIR])dnl
+AC_REQUIRE([AM_OUTPUT_DEPENDENCY_COMMANDS])dnl
+AC_REQUIRE([AM_MAKE_INCLUDE])dnl
+AC_REQUIRE([AM_DEP_TRACK])dnl
+
+ifelse([$1], CC,   [depcc="$CC"   am_compiler_list=],
+       [$1], CXX,  [depcc="$CXX"  am_compiler_list=],
+       [$1], OBJC, [depcc="$OBJC" am_compiler_list='gcc3 gcc'],
+       [$1], UPC,  [depcc="$UPC"  am_compiler_list=],
+       [$1], GCJ,  [depcc="$GCJ"  am_compiler_list='gcc3 gcc'],
+                   [depcc="$$1"   am_compiler_list=])
+
+AC_CACHE_CHECK([dependency style of $depcc],
+               [am_cv_$1_dependencies_compiler_type],
+[if test -z "$AMDEP_TRUE" && test -f "$am_depcomp"; then
+  # We make a subdir and do the tests there.  Otherwise we can end up
+  # making bogus files that we don't know about and never remove.  For
+  # instance it was reported that on HP-UX the gcc test will end up
+  # making a dummy file named `D' -- because `-MD' means `put the output
+  # in D'.
+  rm -rf conftest.dir
+  mkdir conftest.dir
+  # Copy depcomp to subdir because otherwise we won't find it if we're
+  # using a relative directory.
+  cp "$am_depcomp" conftest.dir
+  cd conftest.dir
+  # We will build objects and dependencies in a subdirectory because
+  # it helps to detect inapplicable dependency modes.  For instance
+  # both Tru64's cc and ICC support -MD to output dependencies as a
+  # side effect of compilation, but ICC will put the dependencies in
+  # the current directory while Tru64 will put them in the object
+  # directory.
+  mkdir sub
+
+  am_cv_$1_dependencies_compiler_type=none
+  if test "$am_compiler_list" = ""; then
+     am_compiler_list=`sed -n ['s/^#*\([a-zA-Z0-9]*\))$/\1/p'] < ./depcomp`
+  fi
+  am__universal=false
+  m4_case([$1], [CC],
+    [case " $depcc " in #(
+     *\ -arch\ *\ -arch\ *) am__universal=true ;;
+     esac],
+    [CXX],
+    [case " $depcc " in #(
+     *\ -arch\ *\ -arch\ *) am__universal=true ;;
+     esac])
+
+  for depmode in $am_compiler_list; do
+    # Setup a source with many dependencies, because some compilers
+    # like to wrap large dependency lists on column 80 (with \), and
+    # we should not choose a depcomp mode which is confused by this.
+    #
+    # We need to recreate these files for each test, as the compiler may
+    # overwrite some of them when testing with obscure command lines.
+    # This happens at least with the AIX C compiler.
+    : > sub/conftest.c
+    for i in 1 2 3 4 5 6; do
+      echo '#include "conftst'$i'.h"' >> sub/conftest.c
+      # Using `: > sub/conftst$i.h' creates only sub/conftst1.h with
+      # Solaris 8's {/usr,}/bin/sh.
+      touch sub/conftst$i.h
+    done
+    echo "${am__include} ${am__quote}sub/conftest.Po${am__quote}" > confmf
+
+    # We check with `-c' and `-o' for the sake of the "dashmstdout"
+    # mode.  It turns out that the SunPro C++ compiler does not properly
+    # handle `-M -o', and we need to detect this.  Also, some Intel
+    # versions had trouble with output in subdirs
+    am__obj=sub/conftest.${OBJEXT-o}
+    am__minus_obj="-o $am__obj"
+    case $depmode in
+    gcc)
+      # This depmode causes a compiler race in universal mode.
+      test "$am__universal" = false || continue
+      ;;
+    nosideeffect)
+      # after this tag, mechanisms are not by side-effect, so they'll
+      # only be used when explicitly requested
+      if test "x$enable_dependency_tracking" = xyes; then
+	continue
+      else
+	break
+      fi
+      ;;
+    msvc7 | msvc7msys | msvisualcpp | msvcmsys)
+      # This compiler won't grok `-c -o', but also, the minuso test has
+      # not run yet.  These depmodes are late enough in the game, and
+      # so weak that their functioning should not be impacted.
+      am__obj=conftest.${OBJEXT-o}
+      am__minus_obj=
+      ;;
+    none) break ;;
+    esac
+    if depmode=$depmode \
+       source=sub/conftest.c object=$am__obj \
+       depfile=sub/conftest.Po tmpdepfile=sub/conftest.TPo \
+       $SHELL ./depcomp $depcc -c $am__minus_obj sub/conftest.c \
+         >/dev/null 2>conftest.err &&
+       grep sub/conftst1.h sub/conftest.Po > /dev/null 2>&1 &&
+       grep sub/conftst6.h sub/conftest.Po > /dev/null 2>&1 &&
+       grep $am__obj sub/conftest.Po > /dev/null 2>&1 &&
+       ${MAKE-make} -s -f confmf > /dev/null 2>&1; then
+      # icc doesn't choke on unknown options, it will just issue warnings
+      # or remarks (even with -Werror).  So we grep stderr for any message
+      # that says an option was ignored or not supported.
+      # When given -MP, icc 7.0 and 7.1 complain thusly:
+      #   icc: Command line warning: ignoring option '-M'; no argument required
+      # The diagnosis changed in icc 8.0:
+      #   icc: Command line remark: option '-MP' not supported
+      if (grep 'ignoring option' conftest.err ||
+          grep 'not supported' conftest.err) >/dev/null 2>&1; then :; else
+        am_cv_$1_dependencies_compiler_type=$depmode
+        break
+      fi
+    fi
+  done
+
+  cd ..
+  rm -rf conftest.dir
+else
+  am_cv_$1_dependencies_compiler_type=none
+fi
+])
+AC_SUBST([$1DEPMODE], [depmode=$am_cv_$1_dependencies_compiler_type])
+AM_CONDITIONAL([am__fastdep$1], [
+  test "x$enable_dependency_tracking" != xno \
+  && test "$am_cv_$1_dependencies_compiler_type" = gcc3])
+])
+m4trace:/usr/share/aclocal-1.11/depend.m4:164: -1- AC_DEFUN([AM_SET_DEPDIR], [AC_REQUIRE([AM_SET_LEADING_DOT])dnl
+AC_SUBST([DEPDIR], ["${am__leading_dot}deps"])dnl
+])
+m4trace:/usr/share/aclocal-1.11/depend.m4:172: -1- AC_DEFUN([AM_DEP_TRACK], [AC_ARG_ENABLE(dependency-tracking,
+[  --disable-dependency-tracking  speeds up one-time build
+  --enable-dependency-tracking   do not reject slow dependency extractors])
+if test "x$enable_dependency_tracking" != xno; then
+  am_depcomp="$ac_aux_dir/depcomp"
+  AMDEPBACKSLASH='\'
+  am__nodep='_no'
+fi
+AM_CONDITIONAL([AMDEP], [test "x$enable_dependency_tracking" != xno])
+AC_SUBST([AMDEPBACKSLASH])dnl
+_AM_SUBST_NOTMAKE([AMDEPBACKSLASH])dnl
+AC_SUBST([am__nodep])dnl
+_AM_SUBST_NOTMAKE([am__nodep])dnl
+])
+m4trace:/usr/share/aclocal-1.11/depout.m4:14: -1- AC_DEFUN([_AM_OUTPUT_DEPENDENCY_COMMANDS], [{
+  # Autoconf 2.62 quotes --file arguments for eval, but not when files
+  # are listed without --file.  Let's play safe and only enable the eval
+  # if we detect the quoting.
+  case $CONFIG_FILES in
+  *\'*) eval set x "$CONFIG_FILES" ;;
+  *)   set x $CONFIG_FILES ;;
+  esac
+  shift
+  for mf
+  do
+    # Strip MF so we end up with the name of the file.
+    mf=`echo "$mf" | sed -e 's/:.*$//'`
+    # Check whether this is an Automake generated Makefile or not.
+    # We used to match only the files named `Makefile.in', but
+    # some people rename them; so instead we look at the file content.
+    # Grep'ing the first line is not enough: some people post-process
+    # each Makefile.in and add a new line on top of each file to say so.
+    # Grep'ing the whole file is not good either: AIX grep has a line
+    # limit of 2048, but all sed's we know have understand at least 4000.
+    if sed -n 's,^#.*generated by automake.*,X,p' "$mf" | grep X >/dev/null 2>&1; then
+      dirpart=`AS_DIRNAME("$mf")`
+    else
+      continue
+    fi
+    # Extract the definition of DEPDIR, am__include, and am__quote
+    # from the Makefile without running `make'.
+    DEPDIR=`sed -n 's/^DEPDIR = //p' < "$mf"`
+    test -z "$DEPDIR" && continue
+    am__include=`sed -n 's/^am__include = //p' < "$mf"`
+    test -z "am__include" && continue
+    am__quote=`sed -n 's/^am__quote = //p' < "$mf"`
+    # When using ansi2knr, U may be empty or an underscore; expand it
+    U=`sed -n 's/^U = //p' < "$mf"`
+    # Find all dependency output files, they are included files with
+    # $(DEPDIR) in their names.  We invoke sed twice because it is the
+    # simplest approach to changing $(DEPDIR) to its actual value in the
+    # expansion.
+    for file in `sed -n "
+      s/^$am__include $am__quote\(.*(DEPDIR).*\)$am__quote"'$/\1/p' <"$mf" | \
+	 sed -e 's/\$(DEPDIR)/'"$DEPDIR"'/g' -e 's/\$U/'"$U"'/g'`; do
+      # Make sure the directory exists.
+      test -f "$dirpart/$file" && continue
+      fdir=`AS_DIRNAME(["$file"])`
+      AS_MKDIR_P([$dirpart/$fdir])
+      # echo "creating $dirpart/$file"
+      echo '# dummy' > "$dirpart/$file"
+    done
+  done
+}
+])
+m4trace:/usr/share/aclocal-1.11/depout.m4:75: -1- AC_DEFUN([AM_OUTPUT_DEPENDENCY_COMMANDS], [AC_CONFIG_COMMANDS([depfiles],
+     [test x"$AMDEP_TRUE" != x"" || _AM_OUTPUT_DEPENDENCY_COMMANDS],
+     [AMDEP_TRUE="$AMDEP_TRUE" ac_aux_dir="$ac_aux_dir"])
+])
+m4trace:/usr/share/aclocal-1.11/init.m4:26: -1- AC_DEFUN([AM_INIT_AUTOMAKE], [AC_PREREQ([2.62])dnl
+dnl Autoconf wants to disallow AM_ names.  We explicitly allow
+dnl the ones we care about.
+m4_pattern_allow([^AM_[A-Z]+FLAGS$])dnl
+AC_REQUIRE([AM_SET_CURRENT_AUTOMAKE_VERSION])dnl
+AC_REQUIRE([AC_PROG_INSTALL])dnl
+if test "`cd $srcdir && pwd`" != "`pwd`"; then
+  # Use -I$(srcdir) only when $(srcdir) != ., so that make's output
+  # is not polluted with repeated "-I."
+  AC_SUBST([am__isrc], [' -I$(srcdir)'])_AM_SUBST_NOTMAKE([am__isrc])dnl
+  # test to see if srcdir already configured
+  if test -f $srcdir/config.status; then
+    AC_MSG_ERROR([source directory already configured; run "make distclean" there first])
+  fi
+fi
+
+# test whether we have cygpath
+if test -z "$CYGPATH_W"; then
+  if (cygpath --version) >/dev/null 2>/dev/null; then
+    CYGPATH_W='cygpath -w'
+  else
+    CYGPATH_W=echo
+  fi
+fi
+AC_SUBST([CYGPATH_W])
+
+# Define the identity of the package.
+dnl Distinguish between old-style and new-style calls.
+m4_ifval([$2],
+[m4_ifval([$3], [_AM_SET_OPTION([no-define])])dnl
+ AC_SUBST([PACKAGE], [$1])dnl
+ AC_SUBST([VERSION], [$2])],
+[_AM_SET_OPTIONS([$1])dnl
+dnl Diagnose old-style AC_INIT with new-style AM_AUTOMAKE_INIT.
+m4_if(m4_ifdef([AC_PACKAGE_NAME], 1)m4_ifdef([AC_PACKAGE_VERSION], 1), 11,,
+  [m4_fatal([AC_INIT should be called with package and version arguments])])dnl
+ AC_SUBST([PACKAGE], ['AC_PACKAGE_TARNAME'])dnl
+ AC_SUBST([VERSION], ['AC_PACKAGE_VERSION'])])dnl
+
+_AM_IF_OPTION([no-define],,
+[AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE", [Name of package])
+ AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [Version number of package])])dnl
+
+# Some tools Automake needs.
+AC_REQUIRE([AM_SANITY_CHECK])dnl
+AC_REQUIRE([AC_ARG_PROGRAM])dnl
+AM_MISSING_PROG(ACLOCAL, aclocal-${am__api_version})
+AM_MISSING_PROG(AUTOCONF, autoconf)
+AM_MISSING_PROG(AUTOMAKE, automake-${am__api_version})
+AM_MISSING_PROG(AUTOHEADER, autoheader)
+AM_MISSING_PROG(MAKEINFO, makeinfo)
+AC_REQUIRE([AM_PROG_INSTALL_SH])dnl
+AC_REQUIRE([AM_PROG_INSTALL_STRIP])dnl
+AC_REQUIRE([AM_PROG_MKDIR_P])dnl
+# We need awk for the "check" target.  The system "awk" is bad on
+# some platforms.
+AC_REQUIRE([AC_PROG_AWK])dnl
+AC_REQUIRE([AC_PROG_MAKE_SET])dnl
+AC_REQUIRE([AM_SET_LEADING_DOT])dnl
+_AM_IF_OPTION([tar-ustar], [_AM_PROG_TAR([ustar])],
+	      [_AM_IF_OPTION([tar-pax], [_AM_PROG_TAR([pax])],
+			     [_AM_PROG_TAR([v7])])])
+_AM_IF_OPTION([no-dependencies],,
+[AC_PROVIDE_IFELSE([AC_PROG_CC],
+		  [_AM_DEPENDENCIES(CC)],
+		  [define([AC_PROG_CC],
+			  defn([AC_PROG_CC])[_AM_DEPENDENCIES(CC)])])dnl
+AC_PROVIDE_IFELSE([AC_PROG_CXX],
+		  [_AM_DEPENDENCIES(CXX)],
+		  [define([AC_PROG_CXX],
+			  defn([AC_PROG_CXX])[_AM_DEPENDENCIES(CXX)])])dnl
+AC_PROVIDE_IFELSE([AC_PROG_OBJC],
+		  [_AM_DEPENDENCIES(OBJC)],
+		  [define([AC_PROG_OBJC],
+			  defn([AC_PROG_OBJC])[_AM_DEPENDENCIES(OBJC)])])dnl
+])
+_AM_IF_OPTION([silent-rules], [AC_REQUIRE([AM_SILENT_RULES])])dnl
+dnl The `parallel-tests' driver may need to know about EXEEXT, so add the
+dnl `am__EXEEXT' conditional if _AM_COMPILER_EXEEXT was seen.  This macro
+dnl is hooked onto _AC_COMPILER_EXEEXT early, see below.
+AC_CONFIG_COMMANDS_PRE(dnl
+[m4_provide_if([_AM_COMPILER_EXEEXT],
+  [AM_CONDITIONAL([am__EXEEXT], [test -n "$EXEEXT"])])])dnl
+])
+m4trace:/usr/share/aclocal-1.11/init.m4:126: -1- AC_DEFUN([_AC_AM_CONFIG_HEADER_HOOK], [# Compute $1's index in $config_headers.
+_am_arg=$1
+_am_stamp_count=1
+for _am_header in $config_headers :; do
+  case $_am_header in
+    $_am_arg | $_am_arg:* )
+      break ;;
+    * )
+      _am_stamp_count=`expr $_am_stamp_count + 1` ;;
+  esac
+done
+echo "timestamp for $_am_arg" >`AS_DIRNAME(["$_am_arg"])`/stamp-h[]$_am_stamp_count])
+m4trace:/usr/share/aclocal-1.11/install-sh.m4:14: -1- AC_DEFUN([AM_PROG_INSTALL_SH], [AC_REQUIRE([AM_AUX_DIR_EXPAND])dnl
+if test x"${install_sh}" != xset; then
+  case $am_aux_dir in
+  *\ * | *\	*)
+    install_sh="\${SHELL} '$am_aux_dir/install-sh'" ;;
+  *)
+    install_sh="\${SHELL} $am_aux_dir/install-sh"
+  esac
+fi
+AC_SUBST(install_sh)])
+m4trace:/usr/share/aclocal-1.11/lead-dot.m4:12: -1- AC_DEFUN([AM_SET_LEADING_DOT], [rm -rf .tst 2>/dev/null
+mkdir .tst 2>/dev/null
+if test -d .tst; then
+  am__leading_dot=.
+else
+  am__leading_dot=_
+fi
+rmdir .tst 2>/dev/null
+AC_SUBST([am__leading_dot])])
+m4trace:/usr/share/aclocal-1.11/make.m4:14: -1- AC_DEFUN([AM_MAKE_INCLUDE], [am_make=${MAKE-make}
+cat > confinc << 'END'
+am__doit:
+	@echo this is the am__doit target
+.PHONY: am__doit
+END
+# If we don't find an include directive, just comment out the code.
+AC_MSG_CHECKING([for style of include used by $am_make])
+am__include="#"
+am__quote=
+_am_result=none
+# First try GNU make style include.
+echo "include confinc" > confmf
+# Ignore all kinds of additional output from `make'.
+case `$am_make -s -f confmf 2> /dev/null` in #(
+*the\ am__doit\ target*)
+  am__include=include
+  am__quote=
+  _am_result=GNU
+  ;;
+esac
+# Now try BSD make style include.
+if test "$am__include" = "#"; then
+   echo '.include "confinc"' > confmf
+   case `$am_make -s -f confmf 2> /dev/null` in #(
+   *the\ am__doit\ target*)
+     am__include=.include
+     am__quote="\""
+     _am_result=BSD
+     ;;
+   esac
+fi
+AC_SUBST([am__include])
+AC_SUBST([am__quote])
+AC_MSG_RESULT([$_am_result])
+rm -f confinc confmf
+])
+m4trace:/usr/share/aclocal-1.11/minuso.m4:14: -1- AC_DEFUN([AM_PROG_CC_C_O], [AC_REQUIRE([AC_PROG_CC_C_O])dnl
+AC_REQUIRE([AM_AUX_DIR_EXPAND])dnl
+AC_REQUIRE_AUX_FILE([compile])dnl
+# FIXME: we rely on the cache variable name because
+# there is no other way.
+set dummy $CC
+am_cc=`echo $[2] | sed ['s/[^a-zA-Z0-9_]/_/g;s/^[0-9]/_/']`
+eval am_t=\$ac_cv_prog_cc_${am_cc}_c_o
+if test "$am_t" != yes; then
+   # Losing compiler, so override with the script.
+   # FIXME: It is wrong to rewrite CC.
+   # But if we don't then we get into trouble of one sort or another.
+   # A longer-term fix would be to have automake use am__CC in this case,
+   # and then we could set am__CC="\$(top_srcdir)/compile \$(CC)"
+   CC="$am_aux_dir/compile $CC"
+fi
+dnl Make sure AC_PROG_CC is never called again, or it will override our
+dnl setting of CC.
+m4_define([AC_PROG_CC],
+          [m4_fatal([AC_PROG_CC cannot be called after AM_PROG_CC_C_O])])
+])
+m4trace:/usr/share/aclocal-1.11/missing.m4:14: -1- AC_DEFUN([AM_MISSING_PROG], [AC_REQUIRE([AM_MISSING_HAS_RUN])
+$1=${$1-"${am_missing_run}$2"}
+AC_SUBST($1)])
+m4trace:/usr/share/aclocal-1.11/missing.m4:24: -1- AC_DEFUN([AM_MISSING_HAS_RUN], [AC_REQUIRE([AM_AUX_DIR_EXPAND])dnl
+AC_REQUIRE_AUX_FILE([missing])dnl
+if test x"${MISSING+set}" != xset; then
+  case $am_aux_dir in
+  *\ * | *\	*)
+    MISSING="\${SHELL} \"$am_aux_dir/missing\"" ;;
+  *)
+    MISSING="\${SHELL} $am_aux_dir/missing" ;;
+  esac
+fi
+# Use eval to expand $SHELL
+if eval "$MISSING --run true"; then
+  am_missing_run="$MISSING --run "
+else
+  am_missing_run=
+  AC_MSG_WARN([`missing' script is too old or missing])
+fi
+])
+m4trace:/usr/share/aclocal-1.11/mkdirp.m4:14: -1- AC_DEFUN([AM_PROG_MKDIR_P], [AC_PREREQ([2.60])dnl
+AC_REQUIRE([AC_PROG_MKDIR_P])dnl
+dnl Automake 1.8 to 1.9.6 used to define mkdir_p.  We now use MKDIR_P,
+dnl while keeping a definition of mkdir_p for backward compatibility.
+dnl @MKDIR_P@ is magic: AC_OUTPUT adjusts its value for each Makefile.
+dnl However we cannot define mkdir_p as $(MKDIR_P) for the sake of
+dnl Makefile.ins that do not define MKDIR_P, so we do our own
+dnl adjustment using top_builddir (which is defined more often than
+dnl MKDIR_P).
+AC_SUBST([mkdir_p], ["$MKDIR_P"])dnl
+case $mkdir_p in
+  [[\\/$]]* | ?:[[\\/]]*) ;;
+  */*) mkdir_p="\$(top_builddir)/$mkdir_p" ;;
+esac
+])
+m4trace:/usr/share/aclocal-1.11/options.m4:14: -1- AC_DEFUN([_AM_MANGLE_OPTION], [[_AM_OPTION_]m4_bpatsubst($1, [[^a-zA-Z0-9_]], [_])])
+m4trace:/usr/share/aclocal-1.11/options.m4:20: -1- AC_DEFUN([_AM_SET_OPTION], [m4_define(_AM_MANGLE_OPTION([$1]), 1)])
+m4trace:/usr/share/aclocal-1.11/options.m4:26: -1- AC_DEFUN([_AM_SET_OPTIONS], [m4_foreach_w([_AM_Option], [$1], [_AM_SET_OPTION(_AM_Option)])])
+m4trace:/usr/share/aclocal-1.11/options.m4:32: -1- AC_DEFUN([_AM_IF_OPTION], [m4_ifset(_AM_MANGLE_OPTION([$1]), [$2], [$3])])
+m4trace:/usr/share/aclocal-1.11/runlog.m4:14: -1- AC_DEFUN([AM_RUN_LOG], [{ echo "$as_me:$LINENO: $1" >&AS_MESSAGE_LOG_FD
+   ($1) >&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD
+   ac_status=$?
+   echo "$as_me:$LINENO: \$? = $ac_status" >&AS_MESSAGE_LOG_FD
+   (exit $ac_status); }])
+m4trace:/usr/share/aclocal-1.11/sanity.m4:14: -1- AC_DEFUN([AM_SANITY_CHECK], [AC_MSG_CHECKING([whether build environment is sane])
+# Just in case
+sleep 1
+echo timestamp > conftest.file
+# Reject unsafe characters in $srcdir or the absolute working directory
+# name.  Accept space and tab only in the latter.
+am_lf='
+'
+case `pwd` in
+  *[[\\\"\#\$\&\'\`$am_lf]]*)
+    AC_MSG_ERROR([unsafe absolute working directory name]);;
+esac
+case $srcdir in
+  *[[\\\"\#\$\&\'\`$am_lf\ \	]]*)
+    AC_MSG_ERROR([unsafe srcdir value: `$srcdir']);;
+esac
+
+# Do `set' in a subshell so we don't clobber the current shell's
+# arguments.  Must try -L first in case configure is actually a
+# symlink; some systems play weird games with the mod time of symlinks
+# (eg FreeBSD returns the mod time of the symlink's containing
+# directory).
+if (
+   set X `ls -Lt "$srcdir/configure" conftest.file 2> /dev/null`
+   if test "$[*]" = "X"; then
+      # -L didn't work.
+      set X `ls -t "$srcdir/configure" conftest.file`
+   fi
+   rm -f conftest.file
+   if test "$[*]" != "X $srcdir/configure conftest.file" \
+      && test "$[*]" != "X conftest.file $srcdir/configure"; then
+
+      # If neither matched, then we have a broken ls.  This can happen
+      # if, for instance, CONFIG_SHELL is bash and it inherits a
+      # broken ls alias from the environment.  This has actually
+      # happened.  Such a system could not be considered "sane".
+      AC_MSG_ERROR([ls -t appears to fail.  Make sure there is not a broken
+alias in your environment])
+   fi
+
+   test "$[2]" = conftest.file
+   )
+then
+   # Ok.
+   :
+else
+   AC_MSG_ERROR([newly created file is older than distributed files!
+Check your system clock])
+fi
+AC_MSG_RESULT(yes)])
+m4trace:/usr/share/aclocal-1.11/silent.m4:14: -1- AC_DEFUN([AM_SILENT_RULES], [AC_ARG_ENABLE([silent-rules],
+[  --enable-silent-rules          less verbose build output (undo: `make V=1')
+  --disable-silent-rules         verbose build output (undo: `make V=0')])
+case $enable_silent_rules in
+yes) AM_DEFAULT_VERBOSITY=0;;
+no)  AM_DEFAULT_VERBOSITY=1;;
+*)   AM_DEFAULT_VERBOSITY=m4_if([$1], [yes], [0], [1]);;
+esac
+dnl
+dnl A few `make' implementations (e.g., NonStop OS and NextStep)
+dnl do not support nested variable expansions.
+dnl See automake bug#9928 and bug#10237.
+am_make=${MAKE-make}
+AC_CACHE_CHECK([whether $am_make supports nested variables],
+   [am_cv_make_support_nested_variables],
+   [if AS_ECHO([['TRUE=$(BAR$(V))
+BAR0=false
+BAR1=true
+V=1
+am__doit:
+	@$(TRUE)
+.PHONY: am__doit']]) | $am_make -f - >/dev/null 2>&1; then
+  am_cv_make_support_nested_variables=yes
+else
+  am_cv_make_support_nested_variables=no
+fi])
+if test $am_cv_make_support_nested_variables = yes; then
+  dnl Using `$V' instead of `$(V)' breaks IRIX make.
+  AM_V='$(V)'
+  AM_DEFAULT_V='$(AM_DEFAULT_VERBOSITY)'
+else
+  AM_V=$AM_DEFAULT_VERBOSITY
+  AM_DEFAULT_V=$AM_DEFAULT_VERBOSITY
+fi
+AC_SUBST([AM_V])dnl
+AM_SUBST_NOTMAKE([AM_V])dnl
+AC_SUBST([AM_DEFAULT_V])dnl
+AM_SUBST_NOTMAKE([AM_DEFAULT_V])dnl
+AC_SUBST([AM_DEFAULT_VERBOSITY])dnl
+AM_BACKSLASH='\'
+AC_SUBST([AM_BACKSLASH])dnl
+_AM_SUBST_NOTMAKE([AM_BACKSLASH])dnl
+])
+m4trace:/usr/share/aclocal-1.11/strip.m4:19: -1- AC_DEFUN([AM_PROG_INSTALL_STRIP], [AC_REQUIRE([AM_PROG_INSTALL_SH])dnl
+# Installed binaries are usually stripped using `strip' when the user
+# run `make install-strip'.  However `strip' might not be the right
+# tool to use in cross-compilation environments, therefore Automake
+# will honor the `STRIP' environment variable to overrule this program.
+dnl Don't test for $cross_compiling = yes, because it might be `maybe'.
+if test "$cross_compiling" != no; then
+  AC_CHECK_TOOL([STRIP], [strip], :)
+fi
+INSTALL_STRIP_PROGRAM="\$(install_sh) -c -s"
+AC_SUBST([INSTALL_STRIP_PROGRAM])])
+m4trace:/usr/share/aclocal-1.11/substnot.m4:14: -1- AC_DEFUN([_AM_SUBST_NOTMAKE])
+m4trace:/usr/share/aclocal-1.11/substnot.m4:19: -1- AC_DEFUN([AM_SUBST_NOTMAKE], [_AM_SUBST_NOTMAKE($@)])
+m4trace:/usr/share/aclocal-1.11/tar.m4:24: -1- AC_DEFUN([_AM_PROG_TAR], [# Always define AMTAR for backward compatibility.  Yes, it's still used
+# in the wild :-(  We should find a proper way to deprecate it ...
+AC_SUBST([AMTAR], ['$${TAR-tar}'])
+m4_if([$1], [v7],
+     [am__tar='$${TAR-tar} chof - "$$tardir"' am__untar='$${TAR-tar} xf -'],
+     [m4_case([$1], [ustar],, [pax],,
+              [m4_fatal([Unknown tar format])])
+AC_MSG_CHECKING([how to create a $1 tar archive])
+# Loop over all known methods to create a tar archive until one works.
+_am_tools='gnutar m4_if([$1], [ustar], [plaintar]) pax cpio none'
+_am_tools=${am_cv_prog_tar_$1-$_am_tools}
+# Do not fold the above two line into one, because Tru64 sh and
+# Solaris sh will not grok spaces in the rhs of `-'.
+for _am_tool in $_am_tools
+do
+  case $_am_tool in
+  gnutar)
+    for _am_tar in tar gnutar gtar;
+    do
+      AM_RUN_LOG([$_am_tar --version]) && break
+    done
+    am__tar="$_am_tar --format=m4_if([$1], [pax], [posix], [$1]) -chf - "'"$$tardir"'
+    am__tar_="$_am_tar --format=m4_if([$1], [pax], [posix], [$1]) -chf - "'"$tardir"'
+    am__untar="$_am_tar -xf -"
+    ;;
+  plaintar)
+    # Must skip GNU tar: if it does not support --format= it doesn't create
+    # ustar tarball either.
+    (tar --version) >/dev/null 2>&1 && continue
+    am__tar='tar chf - "$$tardir"'
+    am__tar_='tar chf - "$tardir"'
+    am__untar='tar xf -'
+    ;;
+  pax)
+    am__tar='pax -L -x $1 -w "$$tardir"'
+    am__tar_='pax -L -x $1 -w "$tardir"'
+    am__untar='pax -r'
+    ;;
+  cpio)
+    am__tar='find "$$tardir" -print | cpio -o -H $1 -L'
+    am__tar_='find "$tardir" -print | cpio -o -H $1 -L'
+    am__untar='cpio -i -H $1 -d'
+    ;;
+  none)
+    am__tar=false
+    am__tar_=false
+    am__untar=false
+    ;;
+  esac
+
+  # If the value was cached, stop now.  We just wanted to have am__tar
+  # and am__untar set.
+  test -n "${am_cv_prog_tar_$1}" && break
+
+  # tar/untar a dummy directory, and stop if the command works
+  rm -rf conftest.dir
+  mkdir conftest.dir
+  echo GrepMe > conftest.dir/file
+  AM_RUN_LOG([tardir=conftest.dir && eval $am__tar_ >conftest.tar])
+  rm -rf conftest.dir
+  if test -s conftest.tar; then
+    AM_RUN_LOG([$am__untar <conftest.tar])
+    grep GrepMe conftest.dir/file >/dev/null 2>&1 && break
+  fi
+done
+rm -rf conftest.dir
+
+AC_CACHE_VAL([am_cv_prog_tar_$1], [am_cv_prog_tar_$1=$_am_tool])
+AC_MSG_RESULT([$am_cv_prog_tar_$1])])
+AC_SUBST([am__tar])
+AC_SUBST([am__untar])
+])
+m4trace:m4/ax_check_sign.m4:40: -1- AU_DEFUN([VL_CHECK_SIGN], [m4_if($#, 0, [AX_CHECK_SIGN], [AX_CHECK_SIGN($@)])])
+m4trace:m4/ax_check_sign.m4:40: -1- AC_DEFUN([VL_CHECK_SIGN], [AC_DIAGNOSE([obsolete], [The macro `VL_CHECK_SIGN' is obsolete.
+You should run autoupdate.])dnl
+m4_if($#, 0, [AX_CHECK_SIGN], [AX_CHECK_SIGN($@)])])
+m4trace:m4/ax_check_sign.m4:41: -1- AC_DEFUN([AX_CHECK_SIGN], [
+ typename=`echo $1 | sed "s/@<:@^a-zA-Z0-9_@:>@/_/g"`
+ AC_CACHE_CHECK([whether $1 is signed], ax_cv_decl_${typename}_signed, [
+   AC_TRY_COMPILE([$4],
+     [ int foo @<:@ 1 - 2 * !((($1) -1) < 0) @:>@ ],
+     [ eval "ax_cv_decl_${typename}_signed=\"yes\"" ],
+     [ eval "ax_cv_decl_${typename}_signed=\"no\"" ])])
+ symbolname=`echo $1 | sed "s/@<:@^a-zA-Z0-9_@:>@/_/g" | tr "a-z" "A-Z"`
+ if eval "test \"\${ax_cv_decl_${typename}_signed}\" = \"yes\""; then
+   $2
+ elif eval "test \"\${ax_cv_decl_${typename}_signed}\" = \"no\""; then
+   $3
+ fi
+])
+m4trace:m4/pc_from_ucontext.m4:47: -1- AC_DEFUN([AC_PC_FROM_UCONTEXT], [AC_CHECK_HEADERS(ucontext.h)
+   # Redhat 7 has <sys/ucontext.h>, but it barfs if we #include it directly
+   # (this was fixed in later redhats).  <ucontext.h> works fine, so use that.
+   if grep "Red Hat Linux release 7" /etc/redhat-release >/dev/null 2>&1; then
+     AC_DEFINE(HAVE_SYS_UCONTEXT_H, 0, [<sys/ucontext.h> is broken on redhat 7])
+     ac_cv_header_sys_ucontext_h=no
+   else
+     AC_CHECK_HEADERS(sys/ucontext.h)       # ucontext on OS X 10.6 (at least)
+   fi
+   AC_CHECK_HEADERS(cygwin/signal.h)        # ucontext on cywgin
+   AC_MSG_CHECKING([how to access the program counter from a struct ucontext])
+   pc_fields="           uc_mcontext.gregs[[REG_PC]]"  # Solaris x86 (32 + 64 bit)
+   pc_fields="$pc_fields uc_mcontext.gregs[[REG_EIP]]" # Linux (i386)
+   pc_fields="$pc_fields uc_mcontext.gregs[[REG_RIP]]" # Linux (x86_64)
+   pc_fields="$pc_fields uc_mcontext.sc_ip"            # Linux (ia64)
+   pc_fields="$pc_fields uc_mcontext.uc_regs->gregs[[PT_NIP]]" # Linux (ppc)
+   pc_fields="$pc_fields uc_mcontext.gregs[[R15]]"     # Linux (arm old [untested])
+   pc_fields="$pc_fields uc_mcontext.arm_pc"           # Linux (arm arch 5)
+   pc_fields="$pc_fields uc_mcontext.gp_regs[[PT_NIP]]"  # Suse SLES 11 (ppc64)
+   pc_fields="$pc_fields uc_mcontext.mc_eip"           # FreeBSD (i386)
+   pc_fields="$pc_fields uc_mcontext.mc_rip"           # FreeBSD (x86_64 [untested])
+   pc_fields="$pc_fields uc_mcontext.__gregs[[_REG_EIP]]"  # NetBSD (i386)
+   pc_fields="$pc_fields uc_mcontext.__gregs[[_REG_RIP]]"  # NetBSD (x86_64)
+   pc_fields="$pc_fields uc_mcontext->ss.eip"          # OS X (i386, <=10.4)
+   pc_fields="$pc_fields uc_mcontext->__ss.__eip"      # OS X (i386, >=10.5)
+   pc_fields="$pc_fields uc_mcontext->ss.rip"          # OS X (x86_64)
+   pc_fields="$pc_fields uc_mcontext->__ss.__rip"      # OS X (>=10.5 [untested])
+   pc_fields="$pc_fields uc_mcontext->ss.srr0"         # OS X (ppc, ppc64 [untested])
+   pc_fields="$pc_fields uc_mcontext->__ss.__srr0"     # OS X (>=10.5 [untested])
+   pc_field_found=false
+   for pc_field in $pc_fields; do
+     if ! $pc_field_found; then
+       # Prefer sys/ucontext.h to ucontext.h, for OS X's sake.
+       if test "x$ac_cv_header_cygwin_signal_h" = xyes; then
+         AC_TRY_COMPILE([#define _GNU_SOURCE 1
+                         #include <cygwin/signal.h>],
+                        [ucontext_t u; return u.$pc_field == 0;],
+                        AC_DEFINE_UNQUOTED(PC_FROM_UCONTEXT, $pc_field,
+                                           How to access the PC from a struct ucontext)
+                        AC_MSG_RESULT([$pc_field])
+                        pc_field_found=true)
+       elif test "x$ac_cv_header_sys_ucontext_h" = xyes; then
+         AC_TRY_COMPILE([#define _GNU_SOURCE 1
+                         #include <sys/ucontext.h>],
+                        [ucontext_t u; return u.$pc_field == 0;],
+                        AC_DEFINE_UNQUOTED(PC_FROM_UCONTEXT, $pc_field,
+                                           How to access the PC from a struct ucontext)
+                        AC_MSG_RESULT([$pc_field])
+                        pc_field_found=true)
+       elif test "x$ac_cv_header_ucontext_h" = xyes; then
+         AC_TRY_COMPILE([#define _GNU_SOURCE 1
+                         #include <ucontext.h>],
+                        [ucontext_t u; return u.$pc_field == 0;],
+                        AC_DEFINE_UNQUOTED(PC_FROM_UCONTEXT, $pc_field,
+                                           How to access the PC from a struct ucontext)
+                        AC_MSG_RESULT([$pc_field])
+                        pc_field_found=true)
+       else     # hope some standard header gives it to us
+         AC_TRY_COMPILE([],
+                        [ucontext_t u; return u.$pc_field == 0;],
+                        AC_DEFINE_UNQUOTED(PC_FROM_UCONTEXT, $pc_field,
+                                           How to access the PC from a struct ucontext)
+                        AC_MSG_RESULT([$pc_field])
+                        pc_field_found=true)
+       fi
+     fi
+   done
+   if ! $pc_field_found; then
+     pc_fields="           sc_eip"  # OpenBSD (i386)
+     pc_fields="$pc_fields sc_rip"  # OpenBSD (x86_64)
+     for pc_field in $pc_fields; do
+       if ! $pc_field_found; then
+         AC_TRY_COMPILE([#include <signal.h>],
+                        [ucontext_t u; return u.$pc_field == 0;],
+                        AC_DEFINE_UNQUOTED(PC_FROM_UCONTEXT, $pc_field,
+                                           How to access the PC from a struct ucontext)
+                        AC_MSG_RESULT([$pc_field])
+                        pc_field_found=true)
+       fi
+     done
+   fi
+   if ! $pc_field_found; then
+     [$1]
+   fi])
+m4trace:acinclude.m4:8: -1- AC_DEFUN([TOR_EXTEND_CODEPATH], [
+  if test -d "$1/lib"; then
+    LDFLAGS="-L$1/lib $LDFLAGS"
+  else
+    LDFLAGS="-L$1 $LDFLAGS"
+  fi
+  if test -d "$1/include"; then
+    CPPFLAGS="-I$1/include $CPPFLAGS"
+  else
+    CPPFLAGS="-I$1 $CPPFLAGS"
+  fi
+])
+m4trace:acinclude.m4:22: -1- AC_DEFUN([TOR_DEFINE_CODEPATH], [
+  if test x$1 = "x(system)"; then
+    TOR_LDFLAGS_$2=""
+    TOR_CPPFLAGS_$2=""
+  else
+   if test -d "$1/lib"; then
+     TOR_LDFLAGS_$2="-L$1/lib"
+     TOR_LIBDIR_$2="$1/lib"
+   else
+     TOR_LDFLAGS_$2="-L$1"
+     TOR_LIBDIR_$2="$1"
+   fi
+   if test -d "$1/include"; then
+     TOR_CPPFLAGS_$2="-I$1/include"
+   else
+     TOR_CPPFLAGS_$2="-I$1"
+   fi
+  fi
+  AC_SUBST(TOR_CPPFLAGS_$2)
+  AC_SUBST(TOR_LDFLAGS_$2)
+])
+m4trace:acinclude.m4:48: -1- AC_DEFUN([TOR_CHECK_CFLAGS], [
+  AS_VAR_PUSHDEF([VAR],[tor_cv_cflags_$1])
+  AC_CACHE_CHECK([whether the compiler accepts $1], VAR, [
+    tor_saved_CFLAGS="$CFLAGS"
+    CFLAGS="$CFLAGS -pedantic -Werror $1"
+    AC_TRY_COMPILE([], [return 0;],
+                   [AS_VAR_SET(VAR,yes)],
+                   [AS_VAR_SET(VAR,no)])
+    if test x$2 != x; then
+      AS_VAR_PUSHDEF([can_link],[tor_can_link_$1])
+      AC_TRY_LINK([], [return 0;],
+                  [AS_VAR_SET(can_link,yes)],
+                  [AS_VAR_SET(can_link,no)])
+      AS_VAR_POPDEF([can_link])
+    fi
+    CFLAGS="$tor_saved_CFLAGS"
+  ])
+  if test x$VAR = xyes; then
+    CFLAGS="$CFLAGS $1"
+  fi
+  AS_VAR_POPDEF([VAR])
+])
+m4trace:acinclude.m4:74: -1- AC_DEFUN([TOR_CHECK_LDFLAGS], [
+  AS_VAR_PUSHDEF([VAR],[tor_cv_ldflags_$1])
+  AC_CACHE_CHECK([whether the linker accepts $1], VAR, [
+    tor_saved_CFLAGS="$CFLAGS"
+    tor_saved_LDFLAGS="$LDFLAGS"
+    tor_saved_LIBS="$LIBS"
+    CFLAGS="$CFLAGS -pedantic -Werror"
+    LDFLAGS="$LDFLAGS $2 $1"
+    LIBS="$LIBS $3"
+    AC_RUN_IFELSE([AC_LANG_PROGRAM([#include <stdio.h>], [fputs("", stdout)])],
+                  [AS_VAR_SET(VAR,yes)],
+                  [AS_VAR_SET(VAR,no)],
+	          [AC_TRY_LINK([], [return 0;],
+                                   [AS_VAR_SET(VAR,yes)],
+                                   [AS_VAR_SET(VAR,no)])])
+    CFLAGS="$tor_saved_CFLAGS"
+    LDFLAGS="$tor_saved_LDFLAGS"
+    LIBS="$tor_saved_LIBS"
+  ])
+  if test x$VAR = xyes; then
+    LDFLAGS="$LDFLAGS $1"
+  fi
+  AS_VAR_POPDEF([VAR])
+])
+m4trace:acinclude.m4:100: -1- AC_DEFUN([TOR_WARN_MISSING_LIB], [
+h=""
+if test x$2 = xdevpkg; then
+  h=" headers for"
+fi
+if test -f /etc/debian_version && test x"$tor_$1_$2_debian" != x; then
+  AC_WARN([On Debian, you can install$h $1 using "apt-get install $tor_$1_$2_debian"])
+  if test x"$tor_$1_$2_debian" != x"$tor_$1_devpkg_debian"; then 
+    AC_WARN([   You will probably need $tor_$1_devpkg_debian too.])
+  fi 
+fi
+if test -f /etc/fedora-release && test x"$tor_$1_$2_redhat" != x; then
+  AC_WARN([On Fedora Core, you can install$h $1 using "yum install $tor_$1_$2_redhat"])
+  if test x"$tor_$1_$2_redhat" != x"$tor_$1_devpkg_redhat"; then 
+    AC_WARN([   You will probably need to install $tor_$1_devpkg_redhat too.])
+  fi 
+else
+  if test -f /etc/redhat-release && test x"$tor_$1_$2_redhat" != x; then
+    AC_WARN([On most Redhat-based systems, you can get$h $1 by installing the $tor_$1_$2_redhat RPM package])
+    if test x"$tor_$1_$2_redhat" != x"$tor_$1_devpkg_redhat"; then 
+      AC_WARN([   You will probably need to install $tor_$1_devpkg_redhat too.])
+    fi 
+  fi
+fi
+])
+m4trace:acinclude.m4:137: -1- AC_DEFUN([TOR_SEARCH_LIBRARY], [
+try$1dir=""
+AC_ARG_WITH($1-dir,
+  [  --with-$1-dir=PATH    Specify path to $1 installation ],
+  [
+     if test x$withval != xno ; then
+        try$1dir="$withval"
+     fi
+  ])
+if test "x$try$1dir" = x && test "x$ALT_$1_WITHVAL" != x ; then
+  try$1dir="$ALT_$1_WITHVAL"
+fi
+
+tor_saved_LIBS="$LIBS"
+tor_saved_LDFLAGS="$LDFLAGS"
+tor_saved_CPPFLAGS="$CPPFLAGS"
+AC_CACHE_CHECK([for $1 directory], tor_cv_library_$1_dir, [
+  tor_$1_dir_found=no
+  tor_$1_any_linkable=no
+
+  for tor_trydir in "$try$1dir" "(system)" "$prefix" /usr/local /usr/pkg $8; do
+    LDFLAGS="$tor_saved_LDFLAGS"
+    LIBS="$tor_saved_LIBS $3"
+    CPPFLAGS="$tor_saved_CPPFLAGS"
+
+    if test -z "$tor_trydir" ; then
+      continue;
+    fi
+
+    # Skip the directory if it isn't there.
+    if test ! -d "$tor_trydir" && test "$tor_trydir" != "(system)"; then
+      continue;
+    fi
+
+    # If this isn't blank, try adding the directory (or appropriate
+    # include/libs subdirectories) to the command line.
+    if test "$tor_trydir" != "(system)"; then
+      TOR_EXTEND_CODEPATH($tor_trydir)
+    fi
+
+    # Can we link against (but not necessarily run, or find the headers for)
+    # the binary?
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([$5], [$6])],
+                   [linkable=yes], [linkable=no])
+
+    if test "$linkable" = yes; then
+      tor_$1_any_linkable=yes
+      # Okay, we can link against it.  Can we find the headers?
+      AC_COMPILE_IFELSE([AC_LANG_PROGRAM([$4], [$6])],
+                        [buildable=yes], [buildable=no])
+      if test "$buildable" = yes; then
+         tor_cv_library_$1_dir=$tor_trydir
+         tor_$1_dir_found=yes
+         break
+      fi
+    fi
+  done
+
+  if test "$tor_$1_dir_found" = no; then
+    if test "$tor_$1_any_linkable" = no ; then
+      AC_MSG_WARN([Could not find a linkable $1.  If you have it installed somewhere unusual, you can specify an explicit path using --with-$1-dir])
+      TOR_WARN_MISSING_LIB($1, pkg)
+      AC_MSG_ERROR([Missing libraries; unable to proceed.])
+    else
+      AC_MSG_WARN([We found the libraries for $1, but we could not find the C header files.  You may need to install a devel package.])
+      TOR_WARN_MISSING_LIB($1, devpkg)
+      AC_MSG_ERROR([Missing headers; unable to proceed.])
+    fi
+  fi
+
+  LDFLAGS="$tor_saved_LDFLAGS"
+  LIBS="$tor_saved_LIBS"
+  CPPFLAGS="$tor_saved_CPPFLAGS"
+]) dnl end cache check
+
+LIBS="$LIBS $3"
+if test "$tor_cv_library_$1_dir" != "(system)"; then
+   TOR_EXTEND_CODEPATH($tor_cv_library_$1_dir)
+fi
+
+TOR_DEFINE_CODEPATH($tor_cv_library_$1_dir, $1)
+
+if test "$cross_compiling" != yes; then
+  AC_CACHE_CHECK([whether we need extra options to link $1],
+                 tor_cv_library_$1_linker_option, [
+   orig_LDFLAGS="$LDFLAGS"
+   runs=no
+   linked_with=nothing
+   if test -d "$tor_cv_library_$1_dir/lib"; then
+     tor_trydir="$tor_cv_library_$1_dir/lib"
+   else
+     tor_trydir="$tor_cv_library_$1_dir"
+   fi
+   for tor_tryextra in "(none)" "-Wl,-R$tor_trydir" "-R$tor_trydir" \
+                       "-Wl,-rpath,$tor_trydir" ; do
+     if test "$tor_tryextra" = "(none)"; then
+       LDFLAGS="$orig_LDFLAGS"
+     else
+       LDFLAGS="$tor_tryextra $orig_LDFLAGS"
+     fi
+     AC_RUN_IFELSE([AC_LANG_PROGRAM([$5], [$6])],
+                   [runnable=yes], [runnable=no])
+     if test "$runnable" = yes; then
+        tor_cv_library_$1_linker_option=$tor_tryextra
+        break
+     fi
+   done
+
+   if test "$runnable" = no; then
+     AC_MSG_ERROR([Found linkable $1 in $tor_cv_library_$1_dir, but it does not seem to run, even with -R. Maybe specify another using --with-$1-dir}])
+   fi
+   LDFLAGS="$orig_LDFLAGS"
+  ]) dnl end cache check check for extra options.
+
+  if test "$tor_cv_library_$1_linker_option" != "(none)" ; then
+    TOR_LDFLAGS_$1="$TOR_LDFLAGS_$1 $tor_cv_library_$1_linker_option"
+  fi
+fi # cross-compile
+
+LIBS="$tor_saved_LIBS"
+LDFLAGS="$tor_saved_LDFLAGS"
+CPPFLAGS="$tor_saved_CPPFLAGS"
+
+])
+m4trace:acinclude.m4:267: -1- AC_DEFUN([TOR_CHECK_PROTOTYPE], [
+ AC_CACHE_CHECK([for declaration of $1], tor_cv_$1_declared, [
+   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([$3],[void *ptr= $1 ;])],
+                     tor_cv_$1_declared=yes,tor_cv_$1_declared=no)])
+if test x$tor_cv_$1_declared != xno ; then
+  AC_DEFINE($2, 1,
+       [Defined if the prototype for $1 seems to be present.])
+fi
+])
+m4trace:configure.ac:6: -1- m4_pattern_forbid([^_?A[CHUM]_])
+m4trace:configure.ac:6: -1- m4_pattern_forbid([_AC_])
+m4trace:configure.ac:6: -1- m4_pattern_forbid([^LIBOBJS$], [do not use LIBOBJS directly, use AC_LIBOBJ (see section `AC_LIBOBJ vs LIBOBJS'])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^AS_FLAGS$])
+m4trace:configure.ac:6: -1- m4_pattern_forbid([^_?m4_])
+m4trace:configure.ac:6: -1- m4_pattern_forbid([^dnl$])
+m4trace:configure.ac:6: -1- m4_pattern_forbid([^_?AS_])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^SHELL$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^PATH_SEPARATOR$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^PACKAGE_NAME$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^PACKAGE_TARNAME$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^PACKAGE_VERSION$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^PACKAGE_STRING$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^PACKAGE_BUGREPORT$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^PACKAGE_URL$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^exec_prefix$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^prefix$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^program_transform_name$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^bindir$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^sbindir$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^libexecdir$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^datarootdir$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^datadir$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^sysconfdir$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^sharedstatedir$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^localstatedir$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^includedir$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^oldincludedir$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^docdir$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^infodir$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^htmldir$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^dvidir$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^pdfdir$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^psdir$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^libdir$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^localedir$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^mandir$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^PACKAGE_NAME$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^PACKAGE_TARNAME$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^PACKAGE_VERSION$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^PACKAGE_STRING$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^PACKAGE_BUGREPORT$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^PACKAGE_URL$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^DEFS$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^ECHO_C$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^ECHO_N$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^ECHO_T$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^LIBS$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^build_alias$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^host_alias$])
+m4trace:configure.ac:6: -1- m4_pattern_allow([^target_alias$])
+m4trace:configure.ac:9: -1- AM_INIT_AUTOMAKE
+m4trace:configure.ac:9: -1- m4_pattern_allow([^AM_[A-Z]+FLAGS$])
+m4trace:configure.ac:9: -1- AM_SET_CURRENT_AUTOMAKE_VERSION
+m4trace:configure.ac:9: -1- AM_AUTOMAKE_VERSION([1.11.3])
+m4trace:configure.ac:9: -1- _AM_AUTOCONF_VERSION([2.68])
+m4trace:configure.ac:9: -1- m4_pattern_allow([^INSTALL_PROGRAM$])
+m4trace:configure.ac:9: -1- m4_pattern_allow([^INSTALL_SCRIPT$])
+m4trace:configure.ac:9: -1- m4_pattern_allow([^INSTALL_DATA$])
+m4trace:configure.ac:9: -1- m4_pattern_allow([^am__isrc$])
+m4trace:configure.ac:9: -1- _AM_SUBST_NOTMAKE([am__isrc])
+m4trace:configure.ac:9: -1- m4_pattern_allow([^CYGPATH_W$])
+m4trace:configure.ac:9: -1- _AM_SET_OPTIONS([])
+m4trace:configure.ac:9: -1- m4_pattern_allow([^PACKAGE$])
+m4trace:configure.ac:9: -1- m4_pattern_allow([^VERSION$])
+m4trace:configure.ac:9: -1- _AM_IF_OPTION([no-define], [], [AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE", [Name of package])
+ AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [Version number of package])])
+m4trace:configure.ac:9: -2- _AM_MANGLE_OPTION([no-define])
+m4trace:configure.ac:9: -1- m4_pattern_allow([^PACKAGE$])
+m4trace:configure.ac:9: -1- m4_pattern_allow([^VERSION$])
+m4trace:configure.ac:9: -1- AM_SANITY_CHECK
+m4trace:configure.ac:9: -1- AM_MISSING_PROG([ACLOCAL], [aclocal-${am__api_version}])
+m4trace:configure.ac:9: -1- AM_MISSING_HAS_RUN
+m4trace:configure.ac:9: -1- AM_AUX_DIR_EXPAND
+m4trace:configure.ac:9: -1- m4_pattern_allow([^ACLOCAL$])
+m4trace:configure.ac:9: -1- AM_MISSING_PROG([AUTOCONF], [autoconf])
+m4trace:configure.ac:9: -1- m4_pattern_allow([^AUTOCONF$])
+m4trace:configure.ac:9: -1- AM_MISSING_PROG([AUTOMAKE], [automake-${am__api_version}])
+m4trace:configure.ac:9: -1- m4_pattern_allow([^AUTOMAKE$])
+m4trace:configure.ac:9: -1- AM_MISSING_PROG([AUTOHEADER], [autoheader])
+m4trace:configure.ac:9: -1- m4_pattern_allow([^AUTOHEADER$])
+m4trace:configure.ac:9: -1- AM_MISSING_PROG([MAKEINFO], [makeinfo])
+m4trace:configure.ac:9: -1- m4_pattern_allow([^MAKEINFO$])
+m4trace:configure.ac:9: -1- AM_PROG_INSTALL_SH
+m4trace:configure.ac:9: -1- m4_pattern_allow([^install_sh$])
+m4trace:configure.ac:9: -1- AM_PROG_INSTALL_STRIP
+m4trace:configure.ac:9: -1- m4_pattern_allow([^STRIP$])
+m4trace:configure.ac:9: -1- m4_pattern_allow([^INSTALL_STRIP_PROGRAM$])
+m4trace:configure.ac:9: -1- AM_PROG_MKDIR_P
+m4trace:configure.ac:9: -1- m4_pattern_allow([^MKDIR_P$])
+m4trace:configure.ac:9: -1- m4_pattern_allow([^mkdir_p$])
+m4trace:configure.ac:9: -1- m4_pattern_allow([^AWK$])
+m4trace:configure.ac:9: -1- m4_pattern_allow([^SET_MAKE$])
+m4trace:configure.ac:9: -1- AM_SET_LEADING_DOT
+m4trace:configure.ac:9: -1- m4_pattern_allow([^am__leading_dot$])
+m4trace:configure.ac:9: -1- _AM_IF_OPTION([tar-ustar], [_AM_PROG_TAR([ustar])], [_AM_IF_OPTION([tar-pax], [_AM_PROG_TAR([pax])],
+			     [_AM_PROG_TAR([v7])])])
+m4trace:configure.ac:9: -2- _AM_MANGLE_OPTION([tar-ustar])
+m4trace:configure.ac:9: -1- _AM_IF_OPTION([tar-pax], [_AM_PROG_TAR([pax])], [_AM_PROG_TAR([v7])])
+m4trace:configure.ac:9: -2- _AM_MANGLE_OPTION([tar-pax])
+m4trace:configure.ac:9: -1- _AM_PROG_TAR([v7])
+m4trace:configure.ac:9: -1- m4_pattern_allow([^AMTAR$])
+m4trace:configure.ac:9: -1- m4_pattern_allow([^am__tar$])
+m4trace:configure.ac:9: -1- m4_pattern_allow([^am__untar$])
+m4trace:configure.ac:9: -1- _AM_IF_OPTION([no-dependencies], [], [AC_PROVIDE_IFELSE([AC_PROG_CC],
+		  [_AM_DEPENDENCIES(CC)],
+		  [define([AC_PROG_CC],
+			  defn([AC_PROG_CC])[_AM_DEPENDENCIES(CC)])])dnl
+AC_PROVIDE_IFELSE([AC_PROG_CXX],
+		  [_AM_DEPENDENCIES(CXX)],
+		  [define([AC_PROG_CXX],
+			  defn([AC_PROG_CXX])[_AM_DEPENDENCIES(CXX)])])dnl
+AC_PROVIDE_IFELSE([AC_PROG_OBJC],
+		  [_AM_DEPENDENCIES(OBJC)],
+		  [define([AC_PROG_OBJC],
+			  defn([AC_PROG_OBJC])[_AM_DEPENDENCIES(OBJC)])])dnl
+])
+m4trace:configure.ac:9: -2- _AM_MANGLE_OPTION([no-dependencies])
+m4trace:configure.ac:9: -1- _AM_IF_OPTION([silent-rules], [AC_REQUIRE([AM_SILENT_RULES])])
+m4trace:configure.ac:9: -2- _AM_MANGLE_OPTION([silent-rules])
+m4trace:configure.ac:10: -1- AM_SILENT_RULES([yes])
+m4trace:configure.ac:10: -1- m4_pattern_allow([^AM_V$])
+m4trace:configure.ac:10: -1- AM_SUBST_NOTMAKE([AM_V])
+m4trace:configure.ac:10: -1- _AM_SUBST_NOTMAKE([AM_V])
+m4trace:configure.ac:10: -1- m4_pattern_allow([^AM_DEFAULT_V$])
+m4trace:configure.ac:10: -1- AM_SUBST_NOTMAKE([AM_DEFAULT_V])
+m4trace:configure.ac:10: -1- _AM_SUBST_NOTMAKE([AM_DEFAULT_V])
+m4trace:configure.ac:10: -1- m4_pattern_allow([^AM_DEFAULT_VERBOSITY$])
+m4trace:configure.ac:10: -1- m4_pattern_allow([^AM_BACKSLASH$])
+m4trace:configure.ac:10: -1- _AM_SUBST_NOTMAKE([AM_BACKSLASH])
+m4trace:configure.ac:13: -1- m4_pattern_allow([^build$])
+m4trace:configure.ac:13: -1- m4_pattern_allow([^build_cpu$])
+m4trace:configure.ac:13: -1- m4_pattern_allow([^build_vendor$])
+m4trace:configure.ac:13: -1- m4_pattern_allow([^build_os$])
+m4trace:configure.ac:13: -1- m4_pattern_allow([^host$])
+m4trace:configure.ac:13: -1- m4_pattern_allow([^host_cpu$])
+m4trace:configure.ac:13: -1- m4_pattern_allow([^host_vendor$])
+m4trace:configure.ac:13: -1- m4_pattern_allow([^host_os$])
+m4trace:configure.ac:49: -1- AM_CONDITIONAL([UNITTESTS_ENABLED], [test x$enable_unittests != xno])
+m4trace:configure.ac:49: -1- m4_pattern_allow([^UNITTESTS_ENABLED_TRUE$])
+m4trace:configure.ac:49: -1- m4_pattern_allow([^UNITTESTS_ENABLED_FALSE$])
+m4trace:configure.ac:49: -1- _AM_SUBST_NOTMAKE([UNITTESTS_ENABLED_TRUE])
+m4trace:configure.ac:49: -1- _AM_SUBST_NOTMAKE([UNITTESTS_ENABLED_FALSE])
+m4trace:configure.ac:50: -1- AM_CONDITIONAL([COVERAGE_ENABLED], [test x$enable_coverage = xyes])
+m4trace:configure.ac:50: -1- m4_pattern_allow([^COVERAGE_ENABLED_TRUE$])
+m4trace:configure.ac:50: -1- m4_pattern_allow([^COVERAGE_ENABLED_FALSE$])
+m4trace:configure.ac:50: -1- _AM_SUBST_NOTMAKE([COVERAGE_ENABLED_TRUE])
+m4trace:configure.ac:50: -1- _AM_SUBST_NOTMAKE([COVERAGE_ENABLED_FALSE])
+m4trace:configure.ac:60: -1- m4_pattern_allow([^ENABLE_BUF_FREELISTS$])
+m4trace:configure.ac:64: -1- AM_CONDITIONAL([USE_MEMPOOLS], [test x$enable_mempools = xyes])
+m4trace:configure.ac:64: -1- m4_pattern_allow([^USE_MEMPOOLS_TRUE$])
+m4trace:configure.ac:64: -1- m4_pattern_allow([^USE_MEMPOOLS_FALSE$])
+m4trace:configure.ac:64: -1- _AM_SUBST_NOTMAKE([USE_MEMPOOLS_TRUE])
+m4trace:configure.ac:64: -1- _AM_SUBST_NOTMAKE([USE_MEMPOOLS_FALSE])
+m4trace:configure.ac:66: -1- m4_pattern_allow([^ENABLE_MEMPOOLS$])
+m4trace:configure.ac:70: -1- AM_CONDITIONAL([USE_OPENBSD_MALLOC], [test x$enable_openbsd_malloc = xyes])
+m4trace:configure.ac:70: -1- m4_pattern_allow([^USE_OPENBSD_MALLOC_TRUE$])
+m4trace:configure.ac:70: -1- m4_pattern_allow([^USE_OPENBSD_MALLOC_FALSE$])
+m4trace:configure.ac:70: -1- _AM_SUBST_NOTMAKE([USE_OPENBSD_MALLOC_TRUE])
+m4trace:configure.ac:70: -1- _AM_SUBST_NOTMAKE([USE_OPENBSD_MALLOC_FALSE])
+m4trace:configure.ac:72: -1- m4_pattern_allow([^INSTRUMENT_DOWNLOADS$])
+m4trace:configure.ac:112: -1- m4_pattern_allow([^_REENTRANT$])
+m4trace:configure.ac:136: -1- m4_pattern_allow([^ENABLE_LOCAL_APPDATA$])
+m4trace:configure.ac:159: -1- AC_DEFUN([AC_PROG_AR], [AC_CHECK_TOOL([AR], [ar], [ar])])
+m4trace:configure.ac:160: -1- AC_PROG_AR
+m4trace:configure.ac:160: -1- m4_pattern_allow([^AR$])
+m4trace:configure.ac:176: -1- m4_pattern_allow([^CC$])
+m4trace:configure.ac:176: -1- m4_pattern_allow([^CFLAGS$])
+m4trace:configure.ac:176: -1- m4_pattern_allow([^LDFLAGS$])
+m4trace:configure.ac:176: -1- m4_pattern_allow([^LIBS$])
+m4trace:configure.ac:176: -1- m4_pattern_allow([^CPPFLAGS$])
+m4trace:configure.ac:176: -1- m4_pattern_allow([^CC$])
+m4trace:configure.ac:176: -1- m4_pattern_allow([^CC$])
+m4trace:configure.ac:176: -1- m4_pattern_allow([^CC$])
+m4trace:configure.ac:176: -1- m4_pattern_allow([^CC$])
+m4trace:configure.ac:176: -1- m4_pattern_allow([^ac_ct_CC$])
+m4trace:configure.ac:176: -1- m4_pattern_allow([^EXEEXT$])
+m4trace:configure.ac:176: -1- m4_pattern_allow([^OBJEXT$])
+m4trace:configure.ac:176: -1- _AM_DEPENDENCIES([CC])
+m4trace:configure.ac:176: -1- AM_SET_DEPDIR
+m4trace:configure.ac:176: -1- m4_pattern_allow([^DEPDIR$])
+m4trace:configure.ac:176: -1- AM_OUTPUT_DEPENDENCY_COMMANDS
+m4trace:configure.ac:176: -1- AM_MAKE_INCLUDE
+m4trace:configure.ac:176: -1- m4_pattern_allow([^am__include$])
+m4trace:configure.ac:176: -1- m4_pattern_allow([^am__quote$])
+m4trace:configure.ac:176: -1- AM_DEP_TRACK
+m4trace:configure.ac:176: -1- AM_CONDITIONAL([AMDEP], [test "x$enable_dependency_tracking" != xno])
+m4trace:configure.ac:176: -1- m4_pattern_allow([^AMDEP_TRUE$])
+m4trace:configure.ac:176: -1- m4_pattern_allow([^AMDEP_FALSE$])
+m4trace:configure.ac:176: -1- _AM_SUBST_NOTMAKE([AMDEP_TRUE])
+m4trace:configure.ac:176: -1- _AM_SUBST_NOTMAKE([AMDEP_FALSE])
+m4trace:configure.ac:176: -1- m4_pattern_allow([^AMDEPBACKSLASH$])
+m4trace:configure.ac:176: -1- _AM_SUBST_NOTMAKE([AMDEPBACKSLASH])
+m4trace:configure.ac:176: -1- m4_pattern_allow([^am__nodep$])
+m4trace:configure.ac:176: -1- _AM_SUBST_NOTMAKE([am__nodep])
+m4trace:configure.ac:176: -1- m4_pattern_allow([^CCDEPMODE$])
+m4trace:configure.ac:176: -1- AM_CONDITIONAL([am__fastdepCC], [
+  test "x$enable_dependency_tracking" != xno \
+  && test "$am_cv_CC_dependencies_compiler_type" = gcc3])
+m4trace:configure.ac:176: -1- m4_pattern_allow([^am__fastdepCC_TRUE$])
+m4trace:configure.ac:176: -1- m4_pattern_allow([^am__fastdepCC_FALSE$])
+m4trace:configure.ac:176: -1- _AM_SUBST_NOTMAKE([am__fastdepCC_TRUE])
+m4trace:configure.ac:176: -1- _AM_SUBST_NOTMAKE([am__fastdepCC_FALSE])
+m4trace:configure.ac:177: -1- m4_pattern_allow([^CPP$])
+m4trace:configure.ac:177: -1- m4_pattern_allow([^CPPFLAGS$])
+m4trace:configure.ac:177: -1- m4_pattern_allow([^CPP$])
+m4trace:configure.ac:178: -1- m4_pattern_allow([^SET_MAKE$])
+m4trace:configure.ac:179: -1- m4_pattern_allow([^RANLIB$])
+m4trace:configure.ac:182: -1- m4_pattern_allow([^SED$])
+m4trace:configure.ac:185: -1- m4_pattern_allow([^ASCIIDOC$])
+m4trace:configure.ac:186: -1- m4_pattern_allow([^A2X$])
+m4trace:configure.ac:188: -1- AM_CONDITIONAL([USE_ASCIIDOC], [test x$asciidoc = xtrue])
+m4trace:configure.ac:188: -1- m4_pattern_allow([^USE_ASCIIDOC_TRUE$])
+m4trace:configure.ac:188: -1- m4_pattern_allow([^USE_ASCIIDOC_FALSE$])
+m4trace:configure.ac:188: -1- _AM_SUBST_NOTMAKE([USE_ASCIIDOC_TRUE])
+m4trace:configure.ac:188: -1- _AM_SUBST_NOTMAKE([USE_ASCIIDOC_FALSE])
+m4trace:configure.ac:190: -1- AM_CONDITIONAL([USE_FW_HELPER], [test x$natpmp = xtrue || test x$upnp = xtrue])
+m4trace:configure.ac:190: -1- m4_pattern_allow([^USE_FW_HELPER_TRUE$])
+m4trace:configure.ac:190: -1- m4_pattern_allow([^USE_FW_HELPER_FALSE$])
+m4trace:configure.ac:190: -1- _AM_SUBST_NOTMAKE([USE_FW_HELPER_TRUE])
+m4trace:configure.ac:190: -1- _AM_SUBST_NOTMAKE([USE_FW_HELPER_FALSE])
+m4trace:configure.ac:191: -1- AM_CONDITIONAL([NAT_PMP], [test x$natpmp = xtrue])
+m4trace:configure.ac:191: -1- m4_pattern_allow([^NAT_PMP_TRUE$])
+m4trace:configure.ac:191: -1- m4_pattern_allow([^NAT_PMP_FALSE$])
+m4trace:configure.ac:191: -1- _AM_SUBST_NOTMAKE([NAT_PMP_TRUE])
+m4trace:configure.ac:191: -1- _AM_SUBST_NOTMAKE([NAT_PMP_FALSE])
+m4trace:configure.ac:192: -1- AM_CONDITIONAL([MINIUPNPC], [test x$upnp = xtrue])
+m4trace:configure.ac:192: -1- m4_pattern_allow([^MINIUPNPC_TRUE$])
+m4trace:configure.ac:192: -1- m4_pattern_allow([^MINIUPNPC_FALSE$])
+m4trace:configure.ac:192: -1- _AM_SUBST_NOTMAKE([MINIUPNPC_TRUE])
+m4trace:configure.ac:192: -1- _AM_SUBST_NOTMAKE([MINIUPNPC_FALSE])
+m4trace:configure.ac:193: -1- AM_PROG_CC_C_O
+m4trace:configure.ac:193: -1- m4_pattern_allow([^NO_MINUS_C_MINUS_O$])
+m4trace:configure.ac:195: -1- m4_pattern_allow([^PYTHON$])
+m4trace:configure.ac:196: -1- m4_pattern_allow([^PYTHON$])
+m4trace:configure.ac:200: -1- AM_CONDITIONAL([USEPYTHON], [test "x$PYTHON" != "x"])
+m4trace:configure.ac:200: -1- m4_pattern_allow([^USEPYTHON_TRUE$])
+m4trace:configure.ac:200: -1- m4_pattern_allow([^USEPYTHON_FALSE$])
+m4trace:configure.ac:200: -1- _AM_SUBST_NOTMAKE([USEPYTHON_TRUE])
+m4trace:configure.ac:200: -1- _AM_SUBST_NOTMAKE([USEPYTHON_FALSE])
+m4trace:configure.ac:202: -1- m4_pattern_allow([^FLEXIBLE_ARRAY_MEMBER$])
+m4trace:configure.ac:202: -1- m4_pattern_allow([^FLEXIBLE_ARRAY_MEMBER$])
+m4trace:configure.ac:224: -1- m4_pattern_allow([^SHA1SUM$])
+m4trace:configure.ac:225: -1- m4_pattern_allow([^OPENSSL$])
+m4trace:configure.ac:234: -1- m4_pattern_allow([^TORUSER$])
+m4trace:configure.ac:243: -1- m4_pattern_allow([^TORGROUP$])
+m4trace:configure.ac:279: -1- AM_CONDITIONAL([BUILD_NT_SERVICES], [test x$bwin32 = xtrue])
+m4trace:configure.ac:279: -1- m4_pattern_allow([^BUILD_NT_SERVICES_TRUE$])
+m4trace:configure.ac:279: -1- m4_pattern_allow([^BUILD_NT_SERVICES_FALSE$])
+m4trace:configure.ac:279: -1- _AM_SUBST_NOTMAKE([BUILD_NT_SERVICES_TRUE])
+m4trace:configure.ac:279: -1- _AM_SUBST_NOTMAKE([BUILD_NT_SERVICES_FALSE])
+m4trace:configure.ac:296: -1- m4_pattern_allow([^GREP$])
+m4trace:configure.ac:296: -1- m4_pattern_allow([^EGREP$])
+m4trace:configure.ac:296: -1- m4_pattern_allow([^STDC_HEADERS$])
+m4trace:configure.ac:296: -1- m4_pattern_allow([^WORDS_BIGENDIAN$])
+m4trace:configure.ac:296: -1- m4_pattern_allow([^AC_APPLE_UNIVERSAL_BUILD$])
+m4trace:configure.ac:354: -1- m4_pattern_allow([^HAVE_PTHREAD_H$])
+m4trace:configure.ac:355: -1- m4_pattern_allow([^HAVE_PTHREAD_CREATE$])
+m4trace:configure.ac:371: -1- m4_pattern_allow([^TOR_LIB_WS32$])
+m4trace:configure.ac:372: -1- m4_pattern_allow([^TOR_LIB_GDI$])
+m4trace:configure.ac:373: -1- m4_pattern_allow([^TOR_LIB_IPHLPAPI$])
+m4trace:configure.ac:376: -1- m4_pattern_allow([^HAVE_SYS_TYPES_H$])
+m4trace:configure.ac:379: -1- m4_pattern_allow([^u_int64_t$])
+m4trace:configure.ac:380: -1- m4_pattern_allow([^u_int32_t$])
+m4trace:configure.ac:381: -1- m4_pattern_allow([^u_int16_t$])
+m4trace:configure.ac:382: -1- m4_pattern_allow([^u_int8_t$])
+m4trace:configure.ac:398: -1- TOR_SEARCH_LIBRARY([libevent], [$trylibeventdir], [-levent $STATIC_LIBEVENT_FLAGS $TOR_LIB_WS32], [
+#ifdef _WIN32
+#include <winsock2.h>
+#endif
+#include <stdlib.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <event.h>], [
+#ifdef _WIN32
+#include <winsock2.h>
+#endif
+void exit(int); void *event_init(void);], [
+#ifdef _WIN32
+{WSADATA d; WSAStartup(0x101,&d); }
+#endif
+event_init(); exit(0);
+], [--with-libevent-dir], [/opt/libevent])
+m4trace:configure.ac:398: -1- TOR_EXTEND_CODEPATH([$tor_trydir])
+m4trace:configure.ac:398: -1- TOR_WARN_MISSING_LIB([libevent], [pkg])
+m4trace:configure.ac:398: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:398: the top level])
+m4trace:configure.ac:398: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:398: the top level])
+m4trace:configure.ac:398: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:398: the top level])
+m4trace:configure.ac:398: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:398: the top level])
+m4trace:configure.ac:398: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:398: the top level])
+m4trace:configure.ac:398: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:398: the top level])
+m4trace:configure.ac:398: -1- TOR_WARN_MISSING_LIB([libevent], [devpkg])
+m4trace:configure.ac:398: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:398: the top level])
+m4trace:configure.ac:398: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:398: the top level])
+m4trace:configure.ac:398: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:398: the top level])
+m4trace:configure.ac:398: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:398: the top level])
+m4trace:configure.ac:398: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:398: the top level])
+m4trace:configure.ac:398: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:398: the top level])
+m4trace:configure.ac:398: -1- TOR_EXTEND_CODEPATH([$tor_cv_library_libevent_dir])
+m4trace:configure.ac:398: -1- TOR_DEFINE_CODEPATH([$tor_cv_library_libevent_dir], [libevent])
+m4trace:configure.ac:398: -1- m4_pattern_allow([^TOR_CPPFLAGS_libevent$])
+m4trace:configure.ac:398: -1- m4_pattern_allow([^TOR_LDFLAGS_libevent$])
+m4trace:configure.ac:398: -1- _m4_warn([cross], [AC_RUN_IFELSE called without default to allow cross compiling], [../../lib/autoconf/general.m4:2749: AC_RUN_IFELSE is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:398: the top level])
+m4trace:configure.ac:431: -1- m4_pattern_allow([^HAVE_STRUCT_EVENT_MIN_HEAP_IDX$])
+m4trace:configure.ac:442: -1- AM_CONDITIONAL([USE_EXTERNAL_EVDNS], [test x$ac_cv_header_event2_dns_h = xyes])
+m4trace:configure.ac:442: -1- m4_pattern_allow([^USE_EXTERNAL_EVDNS_TRUE$])
+m4trace:configure.ac:442: -1- m4_pattern_allow([^USE_EXTERNAL_EVDNS_FALSE$])
+m4trace:configure.ac:442: -1- _AM_SUBST_NOTMAKE([USE_EXTERNAL_EVDNS_TRUE])
+m4trace:configure.ac:442: -1- _AM_SUBST_NOTMAKE([USE_EXTERNAL_EVDNS_FALSE])
+m4trace:configure.ac:498: -1- AM_CONDITIONAL([USE_BUFFEREVENTS], [test "$enable_bufferevents" = "yes"])
+m4trace:configure.ac:498: -1- m4_pattern_allow([^USE_BUFFEREVENTS_TRUE$])
+m4trace:configure.ac:498: -1- m4_pattern_allow([^USE_BUFFEREVENTS_FALSE$])
+m4trace:configure.ac:498: -1- _AM_SUBST_NOTMAKE([USE_BUFFEREVENTS_TRUE])
+m4trace:configure.ac:498: -1- _AM_SUBST_NOTMAKE([USE_BUFFEREVENTS_FALSE])
+m4trace:configure.ac:500: -1- m4_pattern_allow([^USE_BUFFEREVENTS$])
+m4trace:configure.ac:507: -1- m4_pattern_allow([^TOR_LIBEVENT_LIBS$])
+m4trace:configure.ac:521: -1- m4_pattern_allow([^TOR_LIB_MATH$])
+m4trace:configure.ac:540: -1- TOR_SEARCH_LIBRARY([openssl], [$tryssldir], [-lssl -lcrypto $TOR_LIB_GDI], [#include <openssl/rand.h>], [void RAND_add(const void *buf, int num, double entropy);], [RAND_add((void*)0,0,0); exit(0);], [], [/usr/local/openssl /usr/lib/openssl /usr/local/ssl /usr/lib/ssl /usr/local /usr/athena /opt/openssl])
+m4trace:configure.ac:540: -1- TOR_EXTEND_CODEPATH([$tor_trydir])
+m4trace:configure.ac:540: -1- TOR_WARN_MISSING_LIB([openssl], [pkg])
+m4trace:configure.ac:540: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:540: the top level])
+m4trace:configure.ac:540: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:540: the top level])
+m4trace:configure.ac:540: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:540: the top level])
+m4trace:configure.ac:540: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:540: the top level])
+m4trace:configure.ac:540: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:540: the top level])
+m4trace:configure.ac:540: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:540: the top level])
+m4trace:configure.ac:540: -1- TOR_WARN_MISSING_LIB([openssl], [devpkg])
+m4trace:configure.ac:540: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:540: the top level])
+m4trace:configure.ac:540: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:540: the top level])
+m4trace:configure.ac:540: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:540: the top level])
+m4trace:configure.ac:540: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:540: the top level])
+m4trace:configure.ac:540: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:540: the top level])
+m4trace:configure.ac:540: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:540: the top level])
+m4trace:configure.ac:540: -1- TOR_EXTEND_CODEPATH([$tor_cv_library_openssl_dir])
+m4trace:configure.ac:540: -1- TOR_DEFINE_CODEPATH([$tor_cv_library_openssl_dir], [openssl])
+m4trace:configure.ac:540: -1- m4_pattern_allow([^TOR_CPPFLAGS_openssl$])
+m4trace:configure.ac:540: -1- m4_pattern_allow([^TOR_LDFLAGS_openssl$])
+m4trace:configure.ac:540: -1- _m4_warn([cross], [AC_RUN_IFELSE called without default to allow cross compiling], [../../lib/autoconf/general.m4:2749: AC_RUN_IFELSE is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:540: the top level])
+m4trace:configure.ac:557: -1- m4_pattern_allow([^TOR_OPENSSL_LIBS$])
+m4trace:configure.ac:567: -1- TOR_SEARCH_LIBRARY([zlib], [$tryzlibdir], [-lz], [#include <zlib.h>], [const char * zlibVersion(void);], [zlibVersion(); exit(0);], [--with-zlib-dir], [/opt/zlib])
+m4trace:configure.ac:567: -1- TOR_EXTEND_CODEPATH([$tor_trydir])
+m4trace:configure.ac:567: -1- TOR_WARN_MISSING_LIB([zlib], [pkg])
+m4trace:configure.ac:567: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:567: the top level])
+m4trace:configure.ac:567: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:567: the top level])
+m4trace:configure.ac:567: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:567: the top level])
+m4trace:configure.ac:567: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:567: the top level])
+m4trace:configure.ac:567: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:567: the top level])
+m4trace:configure.ac:567: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:567: the top level])
+m4trace:configure.ac:567: -1- TOR_WARN_MISSING_LIB([zlib], [devpkg])
+m4trace:configure.ac:567: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:567: the top level])
+m4trace:configure.ac:567: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:567: the top level])
+m4trace:configure.ac:567: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:567: the top level])
+m4trace:configure.ac:567: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:567: the top level])
+m4trace:configure.ac:567: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:567: the top level])
+m4trace:configure.ac:567: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:567: the top level])
+m4trace:configure.ac:567: -1- TOR_EXTEND_CODEPATH([$tor_cv_library_zlib_dir])
+m4trace:configure.ac:567: -1- TOR_DEFINE_CODEPATH([$tor_cv_library_zlib_dir], [zlib])
+m4trace:configure.ac:567: -1- m4_pattern_allow([^TOR_CPPFLAGS_zlib$])
+m4trace:configure.ac:567: -1- m4_pattern_allow([^TOR_LDFLAGS_zlib$])
+m4trace:configure.ac:567: -1- _m4_warn([cross], [AC_RUN_IFELSE called without default to allow cross compiling], [../../lib/autoconf/general.m4:2749: AC_RUN_IFELSE is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:567: the top level])
+m4trace:configure.ac:583: -1- m4_pattern_allow([^TOR_ZLIB_LIBS$])
+m4trace:configure.ac:602: -1- TOR_CHECK_CFLAGS([-Qunused-arguments])
+m4trace:configure.ac:602: -1- _m4_warn([obsolete], [The macro `AC_TRY_COMPILE' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2615: AC_TRY_COMPILE is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:48: TOR_CHECK_CFLAGS is expanded from...
+configure.ac:602: the top level])
+m4trace:configure.ac:602: -1- _m4_warn([obsolete], [The macro `AC_TRY_LINK' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2688: AC_TRY_LINK is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:48: TOR_CHECK_CFLAGS is expanded from...
+configure.ac:602: the top level])
+m4trace:configure.ac:604: -1- TOR_CHECK_CFLAGS([-fstack-protector-all], [also_link])
+m4trace:configure.ac:604: -1- _m4_warn([obsolete], [The macro `AC_TRY_COMPILE' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2615: AC_TRY_COMPILE is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:48: TOR_CHECK_CFLAGS is expanded from...
+configure.ac:604: the top level])
+m4trace:configure.ac:604: -1- _m4_warn([obsolete], [The macro `AC_TRY_LINK' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2688: AC_TRY_LINK is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:48: TOR_CHECK_CFLAGS is expanded from...
+configure.ac:604: the top level])
+m4trace:configure.ac:614: -1- TOR_CHECK_CFLAGS([-Wstack-protector])
+m4trace:configure.ac:614: -1- _m4_warn([obsolete], [The macro `AC_TRY_COMPILE' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2615: AC_TRY_COMPILE is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:48: TOR_CHECK_CFLAGS is expanded from...
+configure.ac:614: the top level])
+m4trace:configure.ac:614: -1- _m4_warn([obsolete], [The macro `AC_TRY_LINK' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2688: AC_TRY_LINK is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:48: TOR_CHECK_CFLAGS is expanded from...
+configure.ac:614: the top level])
+m4trace:configure.ac:615: -1- TOR_CHECK_CFLAGS([-fwrapv])
+m4trace:configure.ac:615: -1- _m4_warn([obsolete], [The macro `AC_TRY_COMPILE' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2615: AC_TRY_COMPILE is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:48: TOR_CHECK_CFLAGS is expanded from...
+configure.ac:615: the top level])
+m4trace:configure.ac:615: -1- _m4_warn([obsolete], [The macro `AC_TRY_LINK' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2688: AC_TRY_LINK is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:48: TOR_CHECK_CFLAGS is expanded from...
+configure.ac:615: the top level])
+m4trace:configure.ac:616: -1- TOR_CHECK_CFLAGS([--param ssp-buffer-size=1])
+m4trace:configure.ac:616: -1- _m4_warn([obsolete], [The macro `AC_TRY_COMPILE' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2615: AC_TRY_COMPILE is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:48: TOR_CHECK_CFLAGS is expanded from...
+configure.ac:616: the top level])
+m4trace:configure.ac:616: -1- _m4_warn([obsolete], [The macro `AC_TRY_LINK' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2688: AC_TRY_LINK is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:48: TOR_CHECK_CFLAGS is expanded from...
+configure.ac:616: the top level])
+m4trace:configure.ac:618: -1- TOR_CHECK_CFLAGS([-fPIE])
+m4trace:configure.ac:618: -1- _m4_warn([obsolete], [The macro `AC_TRY_COMPILE' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2615: AC_TRY_COMPILE is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:48: TOR_CHECK_CFLAGS is expanded from...
+configure.ac:618: the top level])
+m4trace:configure.ac:618: -1- _m4_warn([obsolete], [The macro `AC_TRY_LINK' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2688: AC_TRY_LINK is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:48: TOR_CHECK_CFLAGS is expanded from...
+configure.ac:618: the top level])
+m4trace:configure.ac:619: -1- TOR_CHECK_LDFLAGS([-pie], ["$all_ldflags_for_check"], ["$all_libs_for_check"])
+m4trace:configure.ac:619: -1- _m4_warn([obsolete], [The macro `AC_TRY_LINK' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2688: AC_TRY_LINK is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2749: AC_RUN_IFELSE is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:74: TOR_CHECK_LDFLAGS is expanded from...
+configure.ac:619: the top level])
+m4trace:configure.ac:624: -1- TOR_CHECK_CFLAGS([-fsanitize=address])
+m4trace:configure.ac:624: -1- _m4_warn([obsolete], [The macro `AC_TRY_COMPILE' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2615: AC_TRY_COMPILE is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:48: TOR_CHECK_CFLAGS is expanded from...
+configure.ac:624: the top level])
+m4trace:configure.ac:624: -1- _m4_warn([obsolete], [The macro `AC_TRY_LINK' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2688: AC_TRY_LINK is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:48: TOR_CHECK_CFLAGS is expanded from...
+configure.ac:624: the top level])
+m4trace:configure.ac:625: -1- TOR_CHECK_CFLAGS([-fsanitize=undefined])
+m4trace:configure.ac:625: -1- _m4_warn([obsolete], [The macro `AC_TRY_COMPILE' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2615: AC_TRY_COMPILE is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:48: TOR_CHECK_CFLAGS is expanded from...
+configure.ac:625: the top level])
+m4trace:configure.ac:625: -1- _m4_warn([obsolete], [The macro `AC_TRY_LINK' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2688: AC_TRY_LINK is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:48: TOR_CHECK_CFLAGS is expanded from...
+configure.ac:625: the top level])
+m4trace:configure.ac:626: -1- TOR_CHECK_CFLAGS([-fno-omit-frame-pointer])
+m4trace:configure.ac:626: -1- _m4_warn([obsolete], [The macro `AC_TRY_COMPILE' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2615: AC_TRY_COMPILE is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:48: TOR_CHECK_CFLAGS is expanded from...
+configure.ac:626: the top level])
+m4trace:configure.ac:626: -1- _m4_warn([obsolete], [The macro `AC_TRY_LINK' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2688: AC_TRY_LINK is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:48: TOR_CHECK_CFLAGS is expanded from...
+configure.ac:626: the top level])
+m4trace:configure.ac:630: -1- TOR_CHECK_LDFLAGS([-z relro -z now], ["$all_ldflags_for_check"], ["$all_libs_for_check"])
+m4trace:configure.ac:630: -1- _m4_warn([obsolete], [The macro `AC_TRY_LINK' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2688: AC_TRY_LINK is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2749: AC_RUN_IFELSE is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:74: TOR_CHECK_LDFLAGS is expanded from...
+configure.ac:630: the top level])
+m4trace:configure.ac:634: -1- TOR_CHECK_LDFLAGS([-rdynamic])
+m4trace:configure.ac:634: -1- _m4_warn([obsolete], [The macro `AC_TRY_LINK' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2688: AC_TRY_LINK is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2749: AC_RUN_IFELSE is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:74: TOR_CHECK_LDFLAGS is expanded from...
+configure.ac:634: the top level])
+m4trace:configure.ac:640: -1- TOR_CHECK_CFLAGS([-fomit-frame-pointer])
+m4trace:configure.ac:640: -1- _m4_warn([obsolete], [The macro `AC_TRY_COMPILE' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2615: AC_TRY_COMPILE is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:48: TOR_CHECK_CFLAGS is expanded from...
+configure.ac:640: the top level])
+m4trace:configure.ac:640: -1- _m4_warn([obsolete], [The macro `AC_TRY_LINK' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2688: AC_TRY_LINK is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:48: TOR_CHECK_CFLAGS is expanded from...
+configure.ac:640: the top level])
+m4trace:configure.ac:648: -1- m4_pattern_allow([^F_OMIT_FRAME_POINTER$])
+m4trace:configure.ac:655: -1- TOR_CHECK_CFLAGS([-fasynchronous-unwind-tables])
+m4trace:configure.ac:655: -1- _m4_warn([obsolete], [The macro `AC_TRY_COMPILE' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2615: AC_TRY_COMPILE is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:48: TOR_CHECK_CFLAGS is expanded from...
+configure.ac:655: the top level])
+m4trace:configure.ac:655: -1- _m4_warn([obsolete], [The macro `AC_TRY_LINK' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2688: AC_TRY_LINK is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:48: TOR_CHECK_CFLAGS is expanded from...
+configure.ac:655: the top level])
+m4trace:configure.ac:662: -1- m4_pattern_allow([^NAT_PMP$])
+m4trace:configure.ac:663: -1- TOR_SEARCH_LIBRARY([libnatpmp], [$trylibnatpmpdir], [-lnatpmp $TOR_LIB_WS32 $TOR_LIB_IPHLPAPI], [#include <natpmp.h>], [#ifdef _WIN32
+         #define STATICLIB
+         #endif
+         #include <natpmp.h>], [   int r;
+            natpmp_t natpmp;
+            natpmpresp_t response;
+            r = initnatpmp(&natpmp, 0, 0);], [printf("initnatpmp() returned %d (%s)\n", r, r?"FAILED":"SUCCESS");
+            exit(0);], [--with-libnatpmp-dir], [/usr/lib/])
+m4trace:configure.ac:663: -1- TOR_EXTEND_CODEPATH([$tor_trydir])
+m4trace:configure.ac:663: -1- TOR_WARN_MISSING_LIB([libnatpmp], [pkg])
+m4trace:configure.ac:663: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:663: the top level])
+m4trace:configure.ac:663: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:663: the top level])
+m4trace:configure.ac:663: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:663: the top level])
+m4trace:configure.ac:663: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:663: the top level])
+m4trace:configure.ac:663: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:663: the top level])
+m4trace:configure.ac:663: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:663: the top level])
+m4trace:configure.ac:663: -1- TOR_WARN_MISSING_LIB([libnatpmp], [devpkg])
+m4trace:configure.ac:663: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:663: the top level])
+m4trace:configure.ac:663: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:663: the top level])
+m4trace:configure.ac:663: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:663: the top level])
+m4trace:configure.ac:663: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:663: the top level])
+m4trace:configure.ac:663: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:663: the top level])
+m4trace:configure.ac:663: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:663: the top level])
+m4trace:configure.ac:663: -1- TOR_EXTEND_CODEPATH([$tor_cv_library_libnatpmp_dir])
+m4trace:configure.ac:663: -1- TOR_DEFINE_CODEPATH([$tor_cv_library_libnatpmp_dir], [libnatpmp])
+m4trace:configure.ac:663: -1- m4_pattern_allow([^TOR_CPPFLAGS_libnatpmp$])
+m4trace:configure.ac:663: -1- m4_pattern_allow([^TOR_LDFLAGS_libnatpmp$])
+m4trace:configure.ac:663: -1- _m4_warn([cross], [AC_RUN_IFELSE called without default to allow cross compiling], [../../lib/autoconf/general.m4:2749: AC_RUN_IFELSE is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:663: the top level])
+m4trace:configure.ac:685: -1- m4_pattern_allow([^MINIUPNPC$])
+m4trace:configure.ac:693: -1- m4_pattern_allow([^MINIUPNPC15$])
+m4trace:configure.ac:694: -1- TOR_SEARCH_LIBRARY([libminiupnpc], [$trylibminiupnpcdir], [-lminiupnpc $TOR_LIB_WS32 $TOR_LIB_IPHLPAPI], [#include <miniupnpc/miniwget.h>
+             #include <miniupnpc/miniupnpc.h>
+             #include <miniupnpc/upnpcommands.h>], [void upnpDiscover(int delay, const char * multicastif,
+             const char * minissdpdsock, int sameport);], [upnpDiscover(1, 0, 0, 0); exit(0);], [--with-libminiupnpc-dir], [/usr/lib/])
+m4trace:configure.ac:694: -1- TOR_EXTEND_CODEPATH([$tor_trydir])
+m4trace:configure.ac:694: -1- TOR_WARN_MISSING_LIB([libminiupnpc], [pkg])
+m4trace:configure.ac:694: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:694: the top level])
+m4trace:configure.ac:694: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:694: the top level])
+m4trace:configure.ac:694: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:694: the top level])
+m4trace:configure.ac:694: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:694: the top level])
+m4trace:configure.ac:694: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:694: the top level])
+m4trace:configure.ac:694: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:694: the top level])
+m4trace:configure.ac:694: -1- TOR_WARN_MISSING_LIB([libminiupnpc], [devpkg])
+m4trace:configure.ac:694: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:694: the top level])
+m4trace:configure.ac:694: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:694: the top level])
+m4trace:configure.ac:694: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:694: the top level])
+m4trace:configure.ac:694: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:694: the top level])
+m4trace:configure.ac:694: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:694: the top level])
+m4trace:configure.ac:694: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:694: the top level])
+m4trace:configure.ac:694: -1- TOR_EXTEND_CODEPATH([$tor_cv_library_libminiupnpc_dir])
+m4trace:configure.ac:694: -1- TOR_DEFINE_CODEPATH([$tor_cv_library_libminiupnpc_dir], [libminiupnpc])
+m4trace:configure.ac:694: -1- m4_pattern_allow([^TOR_CPPFLAGS_libminiupnpc$])
+m4trace:configure.ac:694: -1- m4_pattern_allow([^TOR_LDFLAGS_libminiupnpc$])
+m4trace:configure.ac:694: -1- _m4_warn([cross], [AC_RUN_IFELSE called without default to allow cross compiling], [../../lib/autoconf/general.m4:2749: AC_RUN_IFELSE is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:694: the top level])
+m4trace:configure.ac:704: -1- TOR_SEARCH_LIBRARY([libminiupnpc], [$trylibminiupnpcdir], [-lminiupnpc $TOR_LIB_WS32 $TOR_LIB_IPHLPAPI], [#include <miniupnpc/miniwget.h>
+             #include <miniupnpc/miniupnpc.h>
+             #include <miniupnpc/upnpcommands.h>], [void upnpDiscover(int delay, const char * multicastif,
+             const char * minissdpdsock, int sameport, int ipv6, int * error);], [upnpDiscover(1, 0, 0, 0, 0, 0); exit(0);], [--with-libminiupnpc-dir], [/usr/lib/])
+m4trace:configure.ac:704: -1- TOR_EXTEND_CODEPATH([$tor_trydir])
+m4trace:configure.ac:704: -1- TOR_WARN_MISSING_LIB([libminiupnpc], [pkg])
+m4trace:configure.ac:704: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:704: the top level])
+m4trace:configure.ac:704: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:704: the top level])
+m4trace:configure.ac:704: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:704: the top level])
+m4trace:configure.ac:704: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:704: the top level])
+m4trace:configure.ac:704: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:704: the top level])
+m4trace:configure.ac:704: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:704: the top level])
+m4trace:configure.ac:704: -1- TOR_WARN_MISSING_LIB([libminiupnpc], [devpkg])
+m4trace:configure.ac:704: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:704: the top level])
+m4trace:configure.ac:704: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:704: the top level])
+m4trace:configure.ac:704: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:704: the top level])
+m4trace:configure.ac:704: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:704: the top level])
+m4trace:configure.ac:704: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:704: the top level])
+m4trace:configure.ac:704: -1- _m4_warn([obsolete], [The macro `AC_WARN' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/oldnames.m4:33: AC_WARN is expanded from...
+acinclude.m4:100: TOR_WARN_MISSING_LIB is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:704: the top level])
+m4trace:configure.ac:704: -1- TOR_EXTEND_CODEPATH([$tor_cv_library_libminiupnpc_dir])
+m4trace:configure.ac:704: -1- TOR_DEFINE_CODEPATH([$tor_cv_library_libminiupnpc_dir], [libminiupnpc])
+m4trace:configure.ac:704: -1- m4_pattern_allow([^TOR_CPPFLAGS_libminiupnpc$])
+m4trace:configure.ac:704: -1- m4_pattern_allow([^TOR_LDFLAGS_libminiupnpc$])
+m4trace:configure.ac:704: -1- _m4_warn([cross], [AC_RUN_IFELSE called without default to allow cross compiling], [../../lib/autoconf/general.m4:2749: AC_RUN_IFELSE is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+acinclude.m4:137: TOR_SEARCH_LIBRARY is expanded from...
+configure.ac:704: the top level])
+m4trace:configure.ac:720: -1- m4_pattern_allow([^HAVE_SECCOMP_H$])
+m4trace:configure.ac:820: -1- m4_pattern_allow([^CURVE25519_ENABLED$])
+m4trace:configure.ac:824: -1- m4_pattern_allow([^USE_CURVE25519_DONNA$])
+m4trace:configure.ac:828: -1- m4_pattern_allow([^USE_CURVE25519_NACL$])
+m4trace:configure.ac:831: -1- AM_CONDITIONAL([BUILD_CURVE25519_DONNA], [test x$build_curve25519_donna = xyes])
+m4trace:configure.ac:831: -1- m4_pattern_allow([^BUILD_CURVE25519_DONNA_TRUE$])
+m4trace:configure.ac:831: -1- m4_pattern_allow([^BUILD_CURVE25519_DONNA_FALSE$])
+m4trace:configure.ac:831: -1- _AM_SUBST_NOTMAKE([BUILD_CURVE25519_DONNA_TRUE])
+m4trace:configure.ac:831: -1- _AM_SUBST_NOTMAKE([BUILD_CURVE25519_DONNA_FALSE])
+m4trace:configure.ac:832: -1- AM_CONDITIONAL([BUILD_CURVE25519_DONNA_C64], [test x$build_curve25519_donna_c64 = xyes])
+m4trace:configure.ac:832: -1- m4_pattern_allow([^BUILD_CURVE25519_DONNA_C64_TRUE$])
+m4trace:configure.ac:832: -1- m4_pattern_allow([^BUILD_CURVE25519_DONNA_C64_FALSE$])
+m4trace:configure.ac:832: -1- _AM_SUBST_NOTMAKE([BUILD_CURVE25519_DONNA_C64_TRUE])
+m4trace:configure.ac:832: -1- _AM_SUBST_NOTMAKE([BUILD_CURVE25519_DONNA_C64_FALSE])
+m4trace:configure.ac:833: -1- AM_CONDITIONAL([CURVE25519_ENABLED], [test x$have_a_curve25519 = xyes])
+m4trace:configure.ac:833: -1- m4_pattern_allow([^CURVE25519_ENABLED_TRUE$])
+m4trace:configure.ac:833: -1- m4_pattern_allow([^CURVE25519_ENABLED_FALSE$])
+m4trace:configure.ac:833: -1- _AM_SUBST_NOTMAKE([CURVE25519_ENABLED_TRUE])
+m4trace:configure.ac:833: -1- _AM_SUBST_NOTMAKE([CURVE25519_ENABLED_FALSE])
+m4trace:configure.ac:834: -1- m4_pattern_allow([^CURVE25519_LIBS$])
+m4trace:configure.ac:837: -1- m4_pattern_allow([^_FILE_OFFSET_BITS$])
+m4trace:configure.ac:837: -1- m4_pattern_allow([^_LARGE_FILES$])
+m4trace:configure.ac:893: -1- m4_pattern_allow([^HAVE_SYS_PARAM_H$])
+m4trace:configure.ac:895: -1- m4_pattern_allow([^HAVE_NET_IF_H$])
+m4trace:configure.ac:902: -1- m4_pattern_allow([^HAVE_NET_PFVAR_H$])
+m4trace:configure.ac:912: -1- m4_pattern_allow([^HAVE_LINUX_NETFILTER_IPV4_H$])
+m4trace:configure.ac:942: -1- m4_pattern_allow([^USE_TRANSPARENT$])
+m4trace:configure.ac:945: -1- m4_pattern_allow([^OPENBSD$])
+m4trace:configure.ac:952: -1- m4_pattern_allow([^HAVE_STRUCT_TIMEVAL_TV_SEC$])
+m4trace:configure.ac:963: -1- m4_pattern_allow([^SIZEOF_INT8_T$])
+m4trace:configure.ac:964: -1- m4_pattern_allow([^SIZEOF_INT16_T$])
+m4trace:configure.ac:965: -1- m4_pattern_allow([^SIZEOF_INT32_T$])
+m4trace:configure.ac:966: -1- m4_pattern_allow([^SIZEOF_INT64_T$])
+m4trace:configure.ac:967: -1- m4_pattern_allow([^SIZEOF_UINT8_T$])
+m4trace:configure.ac:968: -1- m4_pattern_allow([^SIZEOF_UINT16_T$])
+m4trace:configure.ac:969: -1- m4_pattern_allow([^SIZEOF_UINT32_T$])
+m4trace:configure.ac:970: -1- m4_pattern_allow([^SIZEOF_UINT64_T$])
+m4trace:configure.ac:971: -1- m4_pattern_allow([^SIZEOF_INTPTR_T$])
+m4trace:configure.ac:972: -1- m4_pattern_allow([^SIZEOF_UINTPTR_T$])
+m4trace:configure.ac:976: -1- m4_pattern_allow([^SIZEOF_CHAR$])
+m4trace:configure.ac:977: -1- m4_pattern_allow([^SIZEOF_SHORT$])
+m4trace:configure.ac:978: -1- m4_pattern_allow([^SIZEOF_INT$])
+m4trace:configure.ac:979: -1- m4_pattern_allow([^SIZEOF_LONG$])
+m4trace:configure.ac:980: -1- m4_pattern_allow([^SIZEOF_LONG_LONG$])
+m4trace:configure.ac:981: -1- m4_pattern_allow([^SIZEOF___INT64$])
+m4trace:configure.ac:982: -1- m4_pattern_allow([^SIZEOF_VOID_P$])
+m4trace:configure.ac:983: -1- m4_pattern_allow([^SIZEOF_TIME_T$])
+m4trace:configure.ac:984: -1- m4_pattern_allow([^SIZEOF_SIZE_T$])
+m4trace:configure.ac:985: -1- m4_pattern_allow([^SIZEOF_PID_T$])
+m4trace:configure.ac:987: -1- m4_pattern_allow([^HAVE_UINT$])
+m4trace:configure.ac:987: -1- m4_pattern_allow([^HAVE_U_CHAR$])
+m4trace:configure.ac:987: -1- m4_pattern_allow([^HAVE_SSIZE_T$])
+m4trace:configure.ac:989: -1- AC_PC_FROM_UCONTEXT([/bin/true])
+m4trace:configure.ac:989: -1- m4_pattern_allow([^HAVE_UCONTEXT_H$])
+m4trace:configure.ac:989: -1- m4_pattern_allow([^HAVE_SYS_UCONTEXT_H$])
+m4trace:configure.ac:989: -1- m4_pattern_allow([^HAVE_SYS_UCONTEXT_H$])
+m4trace:configure.ac:989: -1- m4_pattern_allow([^HAVE_CYGWIN_SIGNAL_H$])
+m4trace:configure.ac:989: -2- m4_pattern_allow([^PC_FROM_UCONTEXT$])
+m4trace:configure.ac:989: -1- _m4_warn([obsolete], [The macro `AC_TRY_COMPILE' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2615: AC_TRY_COMPILE is expanded from...
+m4/pc_from_ucontext.m4:47: AC_PC_FROM_UCONTEXT is expanded from...
+configure.ac:989: the top level])
+m4trace:configure.ac:989: -2- m4_pattern_allow([^PC_FROM_UCONTEXT$])
+m4trace:configure.ac:989: -1- _m4_warn([obsolete], [The macro `AC_TRY_COMPILE' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2615: AC_TRY_COMPILE is expanded from...
+m4/pc_from_ucontext.m4:47: AC_PC_FROM_UCONTEXT is expanded from...
+configure.ac:989: the top level])
+m4trace:configure.ac:989: -2- m4_pattern_allow([^PC_FROM_UCONTEXT$])
+m4trace:configure.ac:989: -1- _m4_warn([obsolete], [The macro `AC_TRY_COMPILE' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2615: AC_TRY_COMPILE is expanded from...
+m4/pc_from_ucontext.m4:47: AC_PC_FROM_UCONTEXT is expanded from...
+configure.ac:989: the top level])
+m4trace:configure.ac:989: -2- m4_pattern_allow([^PC_FROM_UCONTEXT$])
+m4trace:configure.ac:989: -1- _m4_warn([obsolete], [The macro `AC_TRY_COMPILE' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2615: AC_TRY_COMPILE is expanded from...
+m4/pc_from_ucontext.m4:47: AC_PC_FROM_UCONTEXT is expanded from...
+configure.ac:989: the top level])
+m4trace:configure.ac:989: -2- m4_pattern_allow([^PC_FROM_UCONTEXT$])
+m4trace:configure.ac:989: -1- _m4_warn([obsolete], [The macro `AC_TRY_COMPILE' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2615: AC_TRY_COMPILE is expanded from...
+m4/pc_from_ucontext.m4:47: AC_PC_FROM_UCONTEXT is expanded from...
+configure.ac:989: the top level])
+m4trace:configure.ac:992: -1- m4_pattern_allow([^HAVE_STRUCT_IN6_ADDR$])
+m4trace:configure.ac:992: -1- m4_pattern_allow([^HAVE_STRUCT_SOCKADDR_IN6$])
+m4trace:configure.ac:992: -1- m4_pattern_allow([^HAVE_SA_FAMILY_T$])
+m4trace:configure.ac:1016: -1- m4_pattern_allow([^HAVE_STRUCT_IN6_ADDR_S6_ADDR32$])
+m4trace:configure.ac:1016: -1- m4_pattern_allow([^HAVE_STRUCT_IN6_ADDR_S6_ADDR16$])
+m4trace:configure.ac:1016: -1- m4_pattern_allow([^HAVE_STRUCT_SOCKADDR_IN_SIN_LEN$])
+m4trace:configure.ac:1016: -1- m4_pattern_allow([^HAVE_STRUCT_SOCKADDR_IN6_SIN6_LEN$])
+m4trace:configure.ac:1041: -1- m4_pattern_allow([^HAVE_RLIM_T$])
+m4trace:configure.ac:1053: -1- AX_CHECK_SIGN([time_t], [ AC_DEFINE(TIME_T_IS_SIGNED, 1, [Define if time_t is signed]) ], [ : ], [
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_TIME_H
+#include <sys/time.h>
+#endif
+#ifdef HAVE_TIME_H
+#include <time.h>
+#endif
+])
+m4trace:configure.ac:1053: -1- _m4_warn([obsolete], [The macro `AC_TRY_COMPILE' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2615: AC_TRY_COMPILE is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+m4/ax_check_sign.m4:41: AX_CHECK_SIGN is expanded from...
+configure.ac:1053: the top level])
+m4trace:configure.ac:1053: -1- m4_pattern_allow([^TIME_T_IS_SIGNED$])
+m4trace:configure.ac:1071: -1- AX_CHECK_SIGN([size_t], [ tor_cv_size_t_signed=yes ], [ tor_cv_size_t_signed=no ], [
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+])
+m4trace:configure.ac:1071: -1- _m4_warn([obsolete], [The macro `AC_TRY_COMPILE' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2615: AC_TRY_COMPILE is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+m4/ax_check_sign.m4:41: AX_CHECK_SIGN is expanded from...
+configure.ac:1071: the top level])
+m4trace:configure.ac:1083: -1- AX_CHECK_SIGN([enum always], [ AC_DEFINE(ENUM_VALS_ARE_SIGNED, 1, [Define if enum is always signed]) ], [ : ], [
+ enum always { AAA, BBB, CCC };
+])
+m4trace:configure.ac:1083: -1- _m4_warn([obsolete], [The macro `AC_TRY_COMPILE' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2615: AC_TRY_COMPILE is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2032: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2053: AC_CACHE_CHECK is expanded from...
+m4/ax_check_sign.m4:41: AX_CHECK_SIGN is expanded from...
+configure.ac:1083: the top level])
+m4trace:configure.ac:1083: -1- m4_pattern_allow([^ENUM_VALS_ARE_SIGNED$])
+m4trace:configure.ac:1089: -1- m4_pattern_allow([^SIZEOF_SOCKLEN_T$])
+m4trace:configure.ac:1097: -1- m4_pattern_allow([^SIZEOF_CELL_T$])
+m4trace:configure.ac:1120: -1- m4_pattern_allow([^NULL_REP_IS_ZERO_BYTES$])
+m4trace:configure.ac:1144: -1- m4_pattern_allow([^DOUBLE_0_REP_IS_ZERO_BYTES$])
+m4trace:configure.ac:1168: -1- m4_pattern_allow([^MALLOC_ZERO_WORKS$])
+m4trace:configure.ac:1187: -1- m4_pattern_allow([^USING_TWOS_COMPLEMENT$])
+m4trace:configure.ac:1205: -1- m4_pattern_allow([^RSHIFT_DOES_SIGN_EXTEND$])
+m4trace:configure.ac:1223: -1- m4_pattern_allow([^HAVE_DMALLOC_H$])
+m4trace:configure.ac:1225: -1- m4_pattern_allow([^USE_DMALLOC$])
+m4trace:configure.ac:1245: -1- m4_pattern_allow([^HAVE_MALLINFO$])
+m4trace:configure.ac:1252: -1- m4_pattern_allow([^HAVE_MLOCKALL$])
+m4trace:configure.ac:1253: -1- m4_pattern_allow([^HAVE_DECL_MLOCKALL$])
+m4trace:configure.ac:1262: -1- m4_pattern_allow([^LOGFACILITY$])
+m4trace:configure.ac:1263: -1- m4_pattern_allow([^LOGFACILITY$])
+m4trace:configure.ac:1273: -1- m4_pattern_allow([^HAVE_GETHOSTBYNAME_R$])
+m4trace:configure.ac:1273: -1- m4_pattern_allow([^HAVE_GETHOSTBYNAME_R_6_ARG$])
+m4trace:configure.ac:1273: -1- _m4_warn([obsolete], [The macro `AC_TRY_COMPILE' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2615: AC_TRY_COMPILE is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2591: _AC_COMPILE_IFELSE is expanded from...
+../../lib/autoconf/general.m4:2607: AC_COMPILE_IFELSE is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/functions.m4:60: AC_CHECK_FUNC is expanded from...
+configure.ac:1273: the top level])
+m4trace:configure.ac:1273: -1- m4_pattern_allow([^HAVE_GETHOSTBYNAME_R$])
+m4trace:configure.ac:1273: -1- m4_pattern_allow([^HAVE_GETHOSTBYNAME_R_5_ARG$])
+m4trace:configure.ac:1273: -1- _m4_warn([obsolete], [The macro `AC_TRY_COMPILE' is obsolete.
+You should run autoupdate.], [../../lib/autoconf/general.m4:2615: AC_TRY_COMPILE is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2591: _AC_COMPILE_IFELSE is expanded from...
+../../lib/autoconf/general.m4:2607: AC_COMPILE_IFELSE is expanded from...
+../../lib/autoconf/general.m4:2615: AC_TRY_COMPILE is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2591: _AC_COMPILE_IFELSE is expanded from...
+../../lib/autoconf/general.m4:2607: AC_COMPILE_IFELSE is expanded from...
+../../lib/m4sugar/m4sh.m4:606: AS_IF is expanded from...
+../../lib/autoconf/functions.m4:60: AC_CHECK_FUNC is expanded from...
+configure.ac:1273: the top level])
+m4trace:configure.ac:1273: -1- m4_pattern_allow([^HAVE_GETHOSTBYNAME_R$])
+m4trace:configure.ac:1273: -1- m4_pattern_allow([^HAVE_GETHOSTBYNAME_R_3_ARG$])
+m4trace:configure.ac:1362: -1- m4_pattern_allow([^HAVE_MACRO__func__$])
+m4trace:configure.ac:1366: -1- m4_pattern_allow([^HAVE_MACRO__FUNC__$])
+m4trace:configure.ac:1370: -1- m4_pattern_allow([^HAVE_MACRO__FUNCTION__$])
+m4trace:configure.ac:1375: -1- m4_pattern_allow([^HAVE_EXTERN_ENVIRON_DECLARED$])
+m4trace:configure.ac:1394: -1- m4_pattern_allow([^BUILDDIR$])
+m4trace:configure.ac:1396: -1- m4_pattern_allow([^BUILDDIR$])
+m4trace:configure.ac:1401: -1- m4_pattern_allow([^CONFDIR$])
+m4trace:configure.ac:1403: -1- m4_pattern_allow([^CONFDIR$])
+m4trace:configure.ac:1406: -1- m4_pattern_allow([^BINDIR$])
+m4trace:configure.ac:1408: -1- m4_pattern_allow([^LOCALSTATEDIR$])
+m4trace:configure.ac:1576: -1- m4_pattern_allow([^LIB@&t@OBJS$])
+m4trace:configure.ac:1576: -1- m4_pattern_allow([^LTLIBOBJS$])
+m4trace:configure.ac:1576: -1- AM_CONDITIONAL([am__EXEEXT], [test -n "$EXEEXT"])
+m4trace:configure.ac:1576: -1- m4_pattern_allow([^am__EXEEXT_TRUE$])
+m4trace:configure.ac:1576: -1- m4_pattern_allow([^am__EXEEXT_FALSE$])
+m4trace:configure.ac:1576: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_TRUE])
+m4trace:configure.ac:1576: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_FALSE])
+m4trace:configure.ac:1576: -1- _AC_AM_CONFIG_HEADER_HOOK(["$ac_file"])
+m4trace:configure.ac:1576: -1- _AM_OUTPUT_DEPENDENCY_COMMANDS
